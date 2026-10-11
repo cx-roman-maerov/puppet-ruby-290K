@@ -1,0 +1,42 @@
+﻿module ActionView
+  module Helpers
+    # This helper to exposes a method for caching of view fragments.
+    # See ActionController::Caching::Fragments for usage instructions.
+    module CacheHelper
+      # A method for caching fragments of a view rather than an entire
+      # action or page.  This technique is useful caching pieces like
+      # menus, lists of news topics, static HTML fragments, and so on.
+      # This method takes a block that contains the content you wish
+      # to cache.  See ActionController::Caching::Fragments for more
+      # information.
+      #
+      # ==== Examples
+      # If you wanted to cache a navigation menu, you could do the
+      # following.
+      #
+      #   DynamicName__332
+      #     DynamicName__333
+      #   DynamicName__334
+      #
+      # You can also cache static content...
+      #
+      #   DynamicName__332
+      #      <p>Hello users!  Welcome to our website!</p>
+      #   DynamicName__334
+      #
+      # ...and static content mixed with RHTML content.
+      #
+      #    DynamicName__332
+      #      Topics:
+      #      DynamicName__335
+      #      <i>Topics listed alphabetically</i>
+      #    DynamicName__334
+      def cache(name = {}, options = nil, &block)
+        @controller.fragment_for(output_buffer, name, options, &block)
+      end
+    end
+  end
+end
+
+
+ 

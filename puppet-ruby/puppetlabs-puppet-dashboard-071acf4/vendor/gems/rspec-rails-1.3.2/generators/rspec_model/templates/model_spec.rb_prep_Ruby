@@ -1,0 +1,16 @@
+﻿require 'spec_helper'
+
+describe DynamicName__134 do
+  before(:each) do
+    @valid_attributes = {
+      DynamicName__135
+    }
+  end
+
+  it "should create a new instance given valid attributes" do
+    DynamicName__134.create!(@valid_attributes)
+  end
+end
+
+
+ 

@@ -1,0 +1,14 @@
+﻿Method_266674660()                      
+Method_612596557()                          
+require 'active_support/test_case'
+
+# :enddoc:
+module ActiveSupport
+  class TestCase
+    include Shoulda::ActiveRecord::Matchers
+    include Shoulda::ActionController::Matchers
+  end
+end
+
+
+ 

@@ -1,0 +1,26 @@
+﻿Method_998114017()                                
+Method_57175682()                                           
+Method_204330988()                                    
+Method_786836979()                                                 
+Method_1129201953()                                
+Method_583434286()                                    
+Method_1983145711()                             
+Method_1202421793()                              
+Method_1322386447()                                  
+Method_1192943815()                                     
+
+module ActiveSupport
+  module CoreExtensions
+    # Various extensions for the Ruby core Module class.
+    module Module
+      # Nothing here. Only defined for API documentation purposes.
+    end
+  end
+end
+
+class Module
+  include ActiveSupport::CoreExtensions::Module
+end
+
+
+ 

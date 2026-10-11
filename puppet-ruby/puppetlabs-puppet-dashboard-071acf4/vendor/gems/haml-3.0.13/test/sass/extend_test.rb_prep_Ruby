@@ -1,0 +1,1351 @@
+﻿#!/usr/bin/env ruby
+Method_2050385894()             
+
+class ExtendTest < Test::Unit::TestCase
+  def test_basic
+    assert_equal %{
+.foo, .bar \{
+  a: b; \}
+}, render(%{
+.foo \{a: b\}
+.bar \{@extend .foo\}
+})
+
+    assert_equal %{
+.foo, .bar \{
+  a: b; \}
+}, render(%{
+.bar \{@extend .foo\}
+.foo \{a: b\}
+})
+
+    assert_equal %{
+.foo, .bar \{
+  a: b; \}
+
+.bar \{
+  c: d; \}
+}, render(%{
+.foo \{a: b\}
+.bar \{c: d; @extend .foo\}
+})
+
+    assert_equal %{
+.foo, .bar \{
+  a: b; \}
+
+.bar \{
+  c: d; \}
+}, render(%{
+.foo \{a: b\}
+.bar \{@extend .foo; c: d\}
+})
+  end
+
+  def test_indented_syntax
+    assert_equal %{
+.foo, .bar \{
+  a: b; \}
+}, render(%{
+.foo
+  a: b
+.bar
+  @extend .foo
+}, :syntax => :sass)
+
+    assert_equal %{
+.foo, .bar \{
+  a: b; \}
+}, render(%{
+.foo
+  a: b
+.bar
+  @extend \#{".foo"}
+}, :syntax => :sass)
+  end
+
+  def test_multiple_targets
+    assert_equal %{
+.foo, .bar \{
+  a: b; \}
+
+.blip .foo, .blip .bar \{
+  c: d; \}
+}, render(%{
+.foo \{a: b\}
+.bar \{@extend .foo\}
+.blip .foo \{c: d\}
+})
+  end
+
+  def test_multiple_extendees
+    assert_equal %{
+.foo, .baz \{
+  a: b; \}
+
+.bar, .baz \{
+  c: d; \}
+}, render(%{
+.foo \{a: b\}
+.bar \{c: d\}
+.baz \{@extend .foo; @extend .bar\}
+})
+  end
+
+  def test_multiple_extends_with_single_extender_and_single_target
+    assert_equal %{
+.foo .bar, .baz .bar, .foo .baz, .baz .baz \{
+  a: b; \}
+}, render(%{
+.foo .bar \{a: b\}
+.baz \{@extend .foo; @extend .bar\}
+})
+
+    assert_equal %{
+.foo.bar, .baz \{
+  a: b; \}
+}, render(%{
+.foo.bar \{a: b\}
+.baz \{@extend .foo; @extend .bar\}
+})
+  end
+
+  def test_multiple_extends_with_multiple_extenders_and_single_target
+    assert_equal %{
+.foo .bar, .baz .bar, .foo .bang, .baz .bang \{
+  a: b; \}
+}, render(%{
+.foo .bar \{a: b\}
+.baz \{@extend .foo\}
+.bang \{@extend .bar\}
+})
+
+    assert_equal %{
+.foo.bar, .bar.baz, .baz.bang, .foo.bang \{
+  a: b; \}
+}, render(%{
+.foo.bar \{a: b\}
+.baz \{@extend .foo\}
+.bang \{@extend .bar\}
+})
+  end
+
+  def test_chained_extends
+    assert_equal %{
+.foo, .bar, .baz, .bip \{
+  a: b; \}
+}, render(%{
+.foo \{a: b\}
+.bar \{@extend .foo\}
+.baz \{@extend .bar\}
+.bip \{@extend .bar\}
+})
+  end
+
+  def test_dynamic_extendee
+    assert_equal %{
+.foo, .bar \{
+  a: b; \}
+}, render(%{
+.foo \{a: b\}
+.bar \{@extend \#{".foo"}}
+})
+
+    assert_equal %{
+[baz^="blip12px"], .bar \{
+  a: b; \}
+}, render(%{
+[baz^="blip12px"] \{a: b\}
+.bar \{@extend [baz^="blip\#{12px}"]}
+})
+  end
+
+  def test_nested_target
+    assert_equal %{
+.foo .bar, .foo .baz \{
+  a: b; \}
+}, render(%{
+.foo .bar \{a: b\}
+.baz \{@extend .bar\}
+})
+  end
+
+  def test_target_with_child
+    assert_equal %{
+.foo .bar, .baz .bar \{
+  a: b; \}
+}, render(%{
+.foo .bar \{a: b\}
+.baz \{@extend .foo\}
+})
+  end
+
+  def test_class_unification
+    assert_equal %{
+.foo.bar, .bar.baz \{
+  a: b; \}
+}, render(%{
+.foo.bar \{a: b\}
+.baz \{@extend .foo\}
+})
+
+    assert_equal %{
+.baz \{
+  a: b; \}
+}, render(%{
+.foo.baz \{a: b\}
+.baz \{@extend .foo\}
+})
+  end
+
+  def test_id_unification
+    assert_equal %{
+.foo.bar, .bar#baz \{
+  a: b; \}
+}, render(%{
+.foo.bar \{a: b\}
+#baz \{@extend .foo\}
+})
+
+    assert_equal %{
+#baz \{
+  a: b; \}
+}, render(%{
+.foo#baz \{a: b\}
+#baz \{@extend .foo\}
+})
+
+    assert_equal %{
+.foo#baz \{
+  a: b; \}
+}, render(%{
+.foo#baz \{a: b\}
+#bar \{@extend .foo\}
+})
+  end
+
+  def test_universal_unification_with_simple_target
+    assert_equal %{
+.foo, * \{
+  a: b; \}
+}, render(%{
+.foo \{a: b\}
+* \{@extend .foo\}
+})
+
+    assert_equal %{
+.foo, *|* \{
+  a: b; \}
+}, render(%{
+.foo \{a: b\}
+*|* \{@extend .foo\}
+})
+
+    assert_equal %{
+.bar \{
+  a: b; \}
+}, render(%{
+.foo.bar \{a: b\}
+* \{@extend .foo\}
+})
+
+    assert_equal %{
+.bar \{
+  a: b; \}
+}, render(%{
+.foo.bar \{a: b\}
+*|* \{@extend .foo\}
+})
+
+    assert_equal %{
+.foo.bar, ns|*.bar \{
+  a: b; \}
+}, render(%{
+.foo.bar \{a: b\}
+ns|* \{@extend .foo\}
+})
+  end
+
+  def test_universal_unification_with_namespaceless_universal_target
+    assert_equal %{
+* \{
+  a: b; \}
+}, render(%{
+*.foo \{a: b\}
+* \{@extend .foo\}
+})
+
+    assert_equal %{
+* \{
+  a: b; \}
+}, render(%{
+*.foo \{a: b\}
+*|* \{@extend .foo\}
+})
+
+    assert_equal %{
+*|*.foo, * \{
+  a: b; \}
+}, render(%{
+*|*.foo \{a: b\}
+* \{@extend .foo\}
+})
+
+    assert_equal %{
+*|* \{
+  a: b; \}
+}, render(%{
+*|*.foo \{a: b\}
+*|* \{@extend .foo\}
+})
+
+    assert_equal %{
+*.foo, ns|* \{
+  a: b; \}
+}, render(%{
+*.foo \{a: b\}
+ns|* \{@extend .foo\}
+})
+
+    assert_equal %{
+*|*.foo, ns|* \{
+  a: b; \}
+}, render(%{
+*|*.foo \{a: b\}
+ns|* \{@extend .foo\}
+})
+  end
+
+  def test_universal_unification_with_namespaced_universal_target
+    assert_equal %{
+ns|* \{
+  a: b; \}
+}, render(%{
+ns|*.foo \{a: b\}
+* \{@extend .foo\}
+})
+
+    assert_equal %{
+ns|* \{
+  a: b; \}
+}, render(%{
+ns|*.foo \{a: b\}
+*|* \{@extend .foo\}
+})
+
+    assert_equal %{
+ns1|*.foo \{
+  a: b; \}
+}, render(%{
+ns1|*.foo \{a: b\}
+ns2|* \{@extend .foo\}
+})
+
+    assert_equal %{
+ns|* \{
+  a: b; \}
+}, render(%{
+ns|*.foo \{a: b\}
+ns|* \{@extend .foo\}
+})
+  end
+
+  def test_universal_unification_with_namespaceless_element_target
+    assert_equal %{
+a \{
+  a: b; \}
+}, render(%{
+a.foo \{a: b\}
+* \{@extend .foo\}
+})
+
+    assert_equal %{
+a \{
+  a: b; \}
+}, render(%{
+a.foo \{a: b\}
+*|* \{@extend .foo\}
+})
+
+    assert_equal %{
+*|a.foo, a \{
+  a: b; \}
+}, render(%{
+*|a.foo \{a: b\}
+* \{@extend .foo\}
+})
+
+    assert_equal %{
+*|a \{
+  a: b; \}
+}, render(%{
+*|a.foo \{a: b\}
+*|* \{@extend .foo\}
+})
+
+    assert_equal %{
+a.foo, ns|a \{
+  a: b; \}
+}, render(%{
+a.foo \{a: b\}
+ns|* \{@extend .foo\}
+})
+
+    assert_equal %{
+*|a.foo, ns|a \{
+  a: b; \}
+}, render(%{
+*|a.foo \{a: b\}
+ns|* \{@extend .foo\}
+})
+  end
+
+  def test_universal_unification_with_namespaced_element_target
+    assert_equal %{
+ns|a \{
+  a: b; \}
+}, render(%{
+ns|a.foo \{a: b\}
+* \{@extend .foo\}
+})
+
+    assert_equal %{
+ns|a \{
+  a: b; \}
+}, render(%{
+ns|a.foo \{a: b\}
+*|* \{@extend .foo\}
+})
+
+    assert_equal %{
+ns1|a.foo \{
+  a: b; \}
+}, render(%{
+ns1|a.foo \{a: b\}
+ns2|* \{@extend .foo\}
+})
+
+    assert_equal %{
+ns|a \{
+  a: b; \}
+}, render(%{
+ns|a.foo \{a: b\}
+ns|* \{@extend .foo\}
+})
+  end
+
+  def test_element_unification_with_simple_target
+    assert_equal %{
+.foo, a \{
+  a: b; \}
+}, render(%{
+.foo \{a: b\}
+a \{@extend .foo\}
+})
+
+    assert_equal %{
+.foo.bar, a.bar \{
+  a: b; \}
+}, render(%{
+.foo.bar \{a: b\}
+a \{@extend .foo\}
+})
+
+    assert_equal %{
+.foo.bar, *|a.bar \{
+  a: b; \}
+}, render(%{
+.foo.bar \{a: b\}
+*|a \{@extend .foo\}
+})
+
+    assert_equal %{
+.foo.bar, ns|a.bar \{
+  a: b; \}
+}, render(%{
+.foo.bar \{a: b\}
+ns|a \{@extend .foo\}
+})
+  end
+
+  def test_element_unification_with_namespaceless_universal_target
+    assert_equal %{
+*.foo, a \{
+  a: b; \}
+}, render(%{
+*.foo \{a: b\}
+a \{@extend .foo\}
+})
+
+    assert_equal %{
+*.foo, a \{
+  a: b; \}
+}, render(%{
+*.foo \{a: b\}
+*|a \{@extend .foo\}
+})
+
+    assert_equal %{
+*|*.foo, a \{
+  a: b; \}
+}, render(%{
+*|*.foo \{a: b\}
+a \{@extend .foo\}
+})
+
+    assert_equal %{
+*|*.foo, *|a \{
+  a: b; \}
+}, render(%{
+*|*.foo \{a: b\}
+*|a \{@extend .foo\}
+})
+
+    assert_equal %{
+*.foo, ns|a \{
+  a: b; \}
+}, render(%{
+*.foo \{a: b\}
+ns|a \{@extend .foo\}
+})
+
+    assert_equal %{
+*|*.foo, ns|a \{
+  a: b; \}
+}, render(%{
+*|*.foo \{a: b\}
+ns|a \{@extend .foo\}
+})
+  end
+
+  def test_element_unification_with_namespaced_universal_target
+    assert_equal %{
+ns|*.foo, ns|a \{
+  a: b; \}
+}, render(%{
+ns|*.foo \{a: b\}
+a \{@extend .foo\}
+})
+
+    assert_equal %{
+ns|*.foo, ns|a \{
+  a: b; \}
+}, render(%{
+ns|*.foo \{a: b\}
+*|a \{@extend .foo\}
+})
+
+    assert_equal %{
+ns1|*.foo \{
+  a: b; \}
+}, render(%{
+ns1|*.foo \{a: b\}
+ns2|a \{@extend .foo\}
+})
+
+    assert_equal %{
+ns|*.foo, ns|a \{
+  a: b; \}
+}, render(%{
+ns|*.foo \{a: b\}
+ns|a \{@extend .foo\}
+})
+  end
+
+  def test_element_unification_with_namespaceless_element_target
+    assert_equal %{
+a \{
+  a: b; \}
+}, render(%{
+a.foo \{a: b\}
+a \{@extend .foo\}
+})
+
+    assert_equal %{
+a \{
+  a: b; \}
+}, render(%{
+a.foo \{a: b\}
+*|a \{@extend .foo\}
+})
+
+    assert_equal %{
+*|a.foo, a \{
+  a: b; \}
+}, render(%{
+*|a.foo \{a: b\}
+a \{@extend .foo\}
+})
+
+    assert_equal %{
+*|a \{
+  a: b; \}
+}, render(%{
+*|a.foo \{a: b\}
+*|a \{@extend .foo\}
+})
+
+    assert_equal %{
+a.foo, ns|a \{
+  a: b; \}
+}, render(%{
+a.foo \{a: b\}
+ns|a \{@extend .foo\}
+})
+
+    assert_equal %{
+*|a.foo, ns|a \{
+  a: b; \}
+}, render(%{
+*|a.foo \{a: b\}
+ns|a \{@extend .foo\}
+})
+
+    assert_equal %{
+a.foo \{
+  a: b; \}
+}, render(%{
+a.foo \{a: b\}
+h1 \{@extend .foo\}
+})
+  end
+
+  def test_element_unification_with_namespaced_element_target
+    assert_equal %{
+ns|a \{
+  a: b; \}
+}, render(%{
+ns|a.foo \{a: b\}
+a \{@extend .foo\}
+})
+
+    assert_equal %{
+ns|a \{
+  a: b; \}
+}, render(%{
+ns|a.foo \{a: b\}
+*|a \{@extend .foo\}
+})
+
+    assert_equal %{
+ns1|a.foo \{
+  a: b; \}
+}, render(%{
+ns1|a.foo \{a: b\}
+ns2|a \{@extend .foo\}
+})
+
+    assert_equal %{
+ns|a \{
+  a: b; \}
+}, render(%{
+ns|a.foo \{a: b\}
+ns|a \{@extend .foo\}
+})
+  end
+
+  def test_attribute_unification
+    assert_equal %{
+[foo=bar].baz, [foo=bar][foo=baz] \{
+  a: b; \}
+}, render(%{
+[foo=bar].baz \{a: b\}
+[foo=baz] \{@extend .baz\}
+})
+
+    assert_equal %{
+[foo=bar].baz, [foo=bar][foo^=bar] \{
+  a: b; \}
+}, render(%{
+[foo=bar].baz \{a: b\}
+[foo^=bar] \{@extend .baz\}
+})
+
+    assert_equal %{
+[foo=bar].baz, [foo=bar][foot=bar] \{
+  a: b; \}
+}, render(%{
+[foo=bar].baz \{a: b\}
+[foot=bar] \{@extend .baz\}
+})
+
+    assert_equal %{
+[foo=bar].baz, [foo=bar][ns|foo=bar] \{
+  a: b; \}
+}, render(%{
+[foo=bar].baz \{a: b\}
+[ns|foo=bar] \{@extend .baz\}
+})
+
+    assert_equal %{
+[foo=bar] \{
+  a: b; \}
+}, render(%{
+[foo=bar].baz \{a: b\}
+[foo=bar] \{@extend .baz\}
+})
+  end
+
+  def test_pseudo_unification
+    assert_equal %{
+:foo.baz, :foo:foo(2n+1) \{
+  a: b; \}
+}, render(%{
+:foo.baz \{a: b\}
+:foo(2n+1) \{@extend .baz\}
+})
+
+    assert_equal %{
+:foo.baz, :foo::foo \{
+  a: b; \}
+}, render(%{
+:foo.baz \{a: b\}
+::foo \{@extend .baz\}
+})
+
+    assert_equal %{
+::foo.baz \{
+  a: b; \}
+}, render(%{
+::foo.baz \{a: b\}
+::bar \{@extend .baz\}
+})
+
+    assert_equal %{
+::foo.baz \{
+  a: b; \}
+}, render(%{
+::foo.baz \{a: b\}
+::foo(2n+1) \{@extend .baz\}
+})
+
+    assert_equal %{
+::foo \{
+  a: b; \}
+}, render(%{
+::foo.baz \{a: b\}
+::foo \{@extend .baz\}
+})
+
+    assert_equal %{
+::foo(2n+1) \{
+  a: b; \}
+}, render(%{
+::foo(2n+1).baz \{a: b\}
+::foo(2n+1) \{@extend .baz\}
+})
+
+    assert_equal %{
+:foo.baz, :foo:bar \{
+  a: b; \}
+}, render(%{
+:foo.baz \{a: b\}
+:bar \{@extend .baz\}
+})
+
+    assert_equal %{
+:foo \{
+  a: b; \}
+}, render(%{
+:foo.baz \{a: b\}
+:foo \{@extend .baz\}
+})
+  end
+
+  def test_pseudoelement_remains_at_end_of_selector
+    assert_equal %{
+.foo::bar, .baz::bar \{
+  a: b; \}
+}, render(%{
+.foo::bar \{a: b\}
+.baz \{@extend .foo\}
+})
+
+    assert_equal %{
+a.foo::bar, a.baz::bar \{
+  a: b; \}
+}, render(%{
+a.foo::bar \{a: b\}
+.baz \{@extend .foo\}
+})
+  end
+
+  def test_pseudoclass_remains_at_end_of_selector
+    assert_equal %{
+.foo:bar, .baz:bar \{
+  a: b; \}
+}, render(%{
+.foo:bar \{a: b\}
+.baz \{@extend .foo\}
+})
+
+    assert_equal %{
+a.foo:bar, a.baz:bar \{
+  a: b; \}
+}, render(%{
+a.foo:bar \{a: b\}
+.baz \{@extend .foo\}
+})
+  end
+
+  def test_not_remains_at_end_of_selector
+    assert_equal %{
+.foo:not(.bar), .baz:not(.bar) \{
+  a: b; \}
+}, render(%{
+.foo:not(.bar) \{a: b\}
+.baz \{@extend .foo\}
+})
+  end
+
+  def test_pseudoelement_goes_lefter_than_pseudoclass
+    assert_equal %{
+.foo::bar, .baz:bang::bar \{
+  a: b; \}
+}, render(%{
+.foo::bar \{a: b\}
+.baz:bang \{@extend .foo\}
+})
+
+    assert_equal %{
+.foo:bar, .baz:bar::bang \{
+  a: b; \}
+}, render(%{
+.foo:bar \{a: b\}
+.baz::bang \{@extend .foo\}
+})
+  end
+
+  def test_pseudoelement_goes_lefter_than_not
+    assert_equal %{
+.foo::bar, .baz:not(.bang)::bar \{
+  a: b; \}
+}, render(%{
+.foo::bar \{a: b\}
+.baz:not(.bang) \{@extend .foo\}
+})
+
+    assert_equal %{
+.foo:not(.bang), .baz:not(.bang)::bar \{
+  a: b; \}
+}, render(%{
+.foo:not(.bang) \{a: b\}
+.baz::bar \{@extend .foo\}
+})
+  end
+
+  def test_negation_unification
+    assert_equal %{
+:not(.foo).baz, :not(.foo):not(.bar) \{
+  a: b; \}
+}, render(%{
+:not(.foo).baz \{a: b\}
+:not(.bar) \{@extend .baz\}
+})
+
+    assert_equal %{
+:not(.foo) \{
+  a: b; \}
+}, render(%{
+:not(.foo).baz \{a: b\}
+:not(.foo) \{@extend .baz\}
+})
+
+    assert_equal %{
+:not([a=b]) \{
+  a: b; \}
+}, render(%{
+:not([a=b]).baz \{a: b\}
+:not([a = b]) \{@extend .baz\}
+})
+  end
+
+  ## Long Extendees
+
+  def test_long_extendee
+    assert_equal %{
+.foo.bar, .baz \{
+  a: b; \}
+}, render(%{
+.foo.bar \{a: b\}
+.baz \{@extend .foo.bar\}
+})
+  end
+
+  def test_long_extendee_requires_all_selectors
+    assert_equal %{
+.foo \{
+  a: b; \}
+}, render(%{
+.foo \{a: b\}
+.baz \{@extend .foo.bar\}
+})
+  end
+
+  def test_long_extendee_matches_supersets
+    assert_equal %{
+.foo.bar.bap, .bap.baz \{
+  a: b; \}
+}, render(%{
+.foo.bar.bap \{a: b\}
+.baz \{@extend .foo.bar\}
+})
+  end
+
+  def test_long_extendee_runs_unification
+    assert_equal %{
+ns|*.foo.bar, ns|a.baz \{
+  a: b; \}
+}, render(%{
+ns|*.foo.bar \{a: b\}
+a.baz \{@extend .foo.bar\}
+})
+  end
+
+  ## Long Extenders
+
+  def test_long_extender
+    assert_equal %{
+.foo.bar, .bar.baz.bang \{
+  a: b; \}
+}, render(%{
+.foo.bar \{a: b\}
+.baz.bang \{@extend .foo\}
+})
+  end
+
+  def test_long_extender_runs_unification
+    assert_equal %{
+ns|*.foo.bar, ns|a.bar.baz \{
+  a: b; \}
+}, render(%{
+ns|*.foo.bar \{a: b\}
+a.baz \{@extend .foo\}
+})
+  end
+
+  def test_long_extender_aborts_unification
+    assert_equal %{
+a.foo#bar \{
+  a: b; \}
+}, render(%{
+a.foo#bar \{a: b\}
+h1.baz \{@extend .foo\}
+})
+
+    assert_equal %{
+a.foo#bar \{
+  a: b; \}
+}, render(%{
+a.foo#bar \{a: b\}
+.bang#baz \{@extend .foo\}
+})
+  end
+
+  ## Nested Extenders
+
+  def test_nested_extender
+    assert_equal %{
+.foo, foo bar \{
+  a: b; \}
+}, render(%{
+.foo \{a: b\}
+foo bar \{@extend .foo\}
+})
+  end
+
+  def test_nested_extender_runs_unification
+    assert_equal %{
+.foo.bar, foo bar.bar \{
+  a: b; \}
+}, render(%{
+.foo.bar \{a: b\}
+foo bar \{@extend .foo\}
+})
+  end
+
+  def test_nested_extender_aborts_unification
+    assert_equal %{
+baz.foo \{
+  a: b; \}
+}, render(%{
+baz.foo \{a: b\}
+foo bar \{@extend .foo\}
+})
+  end
+
+  def test_nested_extender_alternates_parents
+    assert_equal %{
+.baz .bip .foo, .baz .bip foo .grank bar, foo .grank .baz .bip bar \{
+  a: b; \}
+}, render(%{
+.baz .bip .foo \{a: b\}
+foo .grank bar \{@extend .foo\}
+})
+  end
+
+  def test_nested_extender_unifies_identical_parents
+    assert_equal %{
+.baz .bip .foo, .baz .bip bar \{
+  a: b; \}
+}, render(%{
+.baz .bip .foo \{a: b\}
+.baz .bip bar \{@extend .foo\}
+})
+  end
+
+  def test_nested_extender_unifies_common_substring
+    assert_equal %{
+.baz .bip .bap .bink .foo, .baz .brat .bip .bap .bink bar, .brat .baz .bip .bap .bink bar \{
+  a: b; \}
+}, render(%{
+.baz .bip .bap .bink .foo \{a: b\}
+.brat .bip .bap bar \{@extend .foo\}
+})
+  end
+
+  def test_nested_extender_unifies_common_subseq
+    assert_equal %{
+.a .x .b .y .foo, .a .x .n .b .y .m bar, .a .n .x .b .y .m bar, .a .x .n .b .m .y bar, .a .n .x .b .m .y bar \{
+  a: b; \}
+}, render(%{
+.a .x .b .y .foo \{a: b\}
+.a .n .b .m bar \{@extend .foo\}
+})
+  end
+
+  def test_nested_extender_chooses_first_subseq
+    assert_equal %{
+.a .b .c .d .foo, .a .b .c .d .a .b .bar \{
+  a: b; \}
+}, render(%{
+.a .b .c .d .foo \{a: b\}
+.c .d .a .b .bar \{@extend .foo\}
+})
+  end
+
+  def test_nested_extender_counts_extended_subselectors
+    assert_equal %{
+.a .bip.bop .foo, .a .b .bip.bop .bar, .b .a .bip.bop .bar \{
+  a: b; \}
+}, render(%{
+.a .bip.bop .foo \{a: b\}
+.b .bip .bar \{@extend .foo\}
+})
+  end
+
+  def test_nested_extender_counts_extended_superselectors
+    assert_equal %{
+.a .bip .foo, .a .b .bip.bop .bar, .b .a .bip.bop .bar \{
+  a: b; \}
+}, render(%{
+.a .bip .foo \{a: b\}
+.b .bip.bop .bar \{@extend .foo\}
+})
+  end
+
+  def test_nested_extender_with_child_selector
+    assert_equal %{
+.baz .foo, .baz foo > bar \{
+  a: b; \}
+}, render(%{
+.baz .foo \{a: b\}
+foo > bar \{@extend .foo\}
+})
+  end
+
+  def test_nested_extender_finds_common_selectors_around_child_selector
+    assert_equal %{
+a > b c .c1, a > b c .c2 \{
+  a: b; \}
+}, render(%{
+a > b c .c1 \{a: b\}
+a c .c2 \{@extend .c1\}
+})
+
+    assert_equal %{
+a > b c .c1, a > b c .c2 \{
+  a: b; \}
+}, render(%{
+a > b c .c1 \{a: b\}
+b c .c2 \{@extend .c1\}
+})
+  end
+
+  def test_nested_extender_doesnt_find_common_selectors_around_adjacent_sibling_selector
+    assert_equal %{
+a + b c .c1, a + b a c .c2, a a + b c .c2 \{
+  a: b; \}
+}, render(%{
+a + b c .c1 \{a: b\}
+a c .c2 \{@extend .c1\}
+})
+
+    assert_equal %{
+a + b c .c1, a a + b c .c2 \{
+  a: b; \}
+}, render(%{
+a + b c .c1 \{a: b\}
+a b .c2 \{@extend .c1\}
+})
+
+    assert_equal %{
+a + b c .c1, a + b c .c2 \{
+  a: b; \}
+}, render(%{
+a + b c .c1 \{a: b\}
+b c .c2 \{@extend .c1\}
+})
+  end
+
+  def test_nested_extender_doesnt_find_common_selectors_around_sibling_selector
+    assert_equal %{
+a ~ b c .c1, a ~ b a c .c2, a a ~ b c .c2 \{
+  a: b; \}
+}, render(%{
+a ~ b c .c1 \{a: b\}
+a c .c2 \{@extend .c1\}
+})
+
+    assert_equal %{
+a ~ b c .c1, a a ~ b c .c2 \{
+  a: b; \}
+}, render(%{
+a ~ b c .c1 \{a: b\}
+a b .c2 \{@extend .c1\}
+})
+
+    assert_equal %{
+a ~ b c .c1, a ~ b c .c2 \{
+  a: b; \}
+}, render(%{
+a ~ b c .c1 \{a: b\}
+b c .c2 \{@extend .c1\}
+})
+  end
+
+  def test_nested_extender_with_early_child_selectors_doesnt_subseq_them
+    assert_equal %{
+.bip > .bap .foo, .bip > .bap .grip > .bap .bar, .grip > .bap .bip > .bap .bar \{
+  a: b; \}
+}, render(%{
+.bip > .bap .foo \{a: b\}
+.grip > .bap .bar \{@extend .foo\}
+})
+
+    assert_equal %{
+.bap > .bip .foo, .bap > .bip .bap > .grip .bar, .bap > .grip .bap > .bip .bar \{
+  a: b; \}
+}, render(%{
+.bap > .bip .foo \{a: b\}
+.bap > .grip .bar \{@extend .foo\}
+})
+  end
+
+  def test_nested_extender_with_child_selector_unifies
+    assert_equal %{
+.baz.foo, foo > bar.baz \{
+  a: b; \}
+}, render(%{
+.baz.foo \{a: b\}
+foo > bar \{@extend .foo\}
+})
+  end
+
+  def test_nested_extender_with_trailing_child_selector
+    assert_raise(Sass::SyntaxError, "bar > can't extend: invalid selector") do
+      render("bar > {@extend .baz}")
+    end
+  end
+
+  def test_nested_extender_with_sibling_selector
+    assert_equal %{
+.baz .foo, .baz foo + bar \{
+  a: b; \}
+}, render(%{
+.baz .foo \{a: b\}
+foo + bar \{@extend .foo\}
+})
+  end
+
+  def test_nested_extender_with_hacky_selector
+    assert_equal %{
+.baz .foo, .baz foo + > > + bar \{
+  a: b; \}
+}, render(%{
+.baz .foo \{a: b\}
+foo + > > + bar \{@extend .foo\}
+})
+
+    assert_equal %{
+.baz .foo, .baz > > bar \{
+  a: b; \}
+}, render(%{
+.baz .foo \{a: b\}
+> > bar \{@extend .foo\}
+})
+  end
+
+  def test_nested_extender_merges_with_same_selector
+    assert_equal %{
+.foo .bar, .foo .baz \{
+  a: b; \}
+}, render(%{
+.foo \{
+  .bar \{a: b\}
+  .baz \{@extend .bar\} \}
+})
+  end
+
+  def test_nested_extender_with_child_selector_merges_with_same_selector
+    assert_equal %{
+.foo > .bar .baz, .foo > .bar .bang \{
+  a: b; \}
+}, render(%{
+.foo > .bar .baz \{a: b\}
+.foo > .bar .bang \{@extend .baz\}
+})
+  end
+
+  # Loops
+
+  def test_extend_self_loop
+    assert_equal %{
+.foo \{
+  a: b; \}
+}, render(%{
+.foo \{a: b; @extend .foo\}
+})
+  end
+
+  def test_basic_extend_loop
+    assert_equal %{
+.bar, .foo \{
+  a: b; \}
+
+.foo, .bar \{
+  c: d; \}
+}, render(%{
+.foo \{a: b; @extend .bar\}
+.bar \{c: d; @extend .foo\}
+})
+  end
+
+  def test_three_level_extend_loop
+    assert_equal %{
+.baz, .bar, .foo \{
+  a: b; \}
+
+.foo, .baz, .bar \{
+  c: d; \}
+
+.bar, .foo, .baz \{
+  e: f; \}
+}, render(%{
+.foo \{a: b; @extend .bar\}
+.bar \{c: d; @extend .baz\}
+.baz \{e: f; @extend .foo\}
+})
+  end
+
+  def test_nested_extend_loop
+    assert_equal %{
+.bar, .bar .foo \{
+  a: b; \}
+  .bar .foo, .bar .foo .foo \{
+    c: d; \}
+}, render(%{
+.bar \{
+  a: b;
+  .foo \{c: d; @extend .bar\}
+\}
+})
+  end
+
+  def test_multiple_extender_merges_with_superset_selector
+    assert_equal %{
+a.bar.baz, a.foo \{
+  a: b; \}
+}, render(%{
+.foo \{@extend .bar; @extend .baz\}
+a.bar.baz \{a: b\}
+})
+  end
+
+  def test_control_flow_if
+    assert_equal %{
+.true, .also-true \{
+  color: green; \}
+
+.false, .also-false \{
+  color: red; \}
+}, render(%{
+.true  \{ color: green; \}
+.false \{ color: red;   \}
+.also-true \{
+  @if true \{ @extend .true;  \}
+  @else    \{ @extend .false; \}
+\}
+.also-false \{
+  @if false \{ @extend .true;  \}
+  @else     \{ @extend .false; \}
+\}
+})
+  end
+
+  def test_control_flow_for
+    assert_equal %{
+.base-0, .added \{
+  color: green; \}
+
+.base-1, .added \{
+  display: block; \}
+
+.base-2, .added \{
+  border: 1px solid blue; \}
+}, render(%{
+.base-0  \{ color: green; \}
+.base-1  \{ display: block; \}
+.base-2  \{ border: 1px solid blue; \}
+.added \{
+  @for $i from 0 to 3 \{
+    @extend .base-\#{$i};
+  }
+}
+})
+  end
+
+  def test_control_flow_while
+    assert_equal %{
+.base-0, .added \{
+  color: green; \}
+
+.base-1, .added \{
+  display: block; \}
+
+.base-2, .added \{
+  border: 1px solid blue; \}
+}, render(%{
+.base-0  \{ color: green; \}
+.base-1  \{ display: block; \}
+.base-2  \{ border: 1px solid blue; \}
+.added \{
+  $i : 0;
+  @while $i < 3 \{
+    @extend .base-\#{$i};
+    $i : $i + 1;
+  }
+}
+})
+  end
+
+         
+
+  def render(sass, options = {})
+    munge_filename options
+    Sass::Engine.new(sass, {:syntax => :scss}.merge(options)).render
+  end
+end
+
+
+ 

@@ -1,0 +1,8 @@
+﻿Method_628372460()                           
+
+class File #:nodoc:
+  extend ActiveSupport::CoreExtensions::File::Atomic
+end
+
+
+ 

@@ -1,0 +1,9 @@
+﻿Method_379933148()  
+Method_1010421609()                                     
+
+class BigDecimal#:nodoc:
+  include ActiveSupport::CoreExtensions::BigDecimal::Conversions
+end
+
+
+ 

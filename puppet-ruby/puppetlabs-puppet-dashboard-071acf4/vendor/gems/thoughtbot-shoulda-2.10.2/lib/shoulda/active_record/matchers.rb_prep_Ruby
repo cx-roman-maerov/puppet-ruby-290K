@@ -1,0 +1,46 @@
+﻿Method_1645271256()                    
+Method_308744498()                                         
+Method_1371986954()                                         
+Method_1272635532()                                              
+Method_54756348()                                                   
+Method_1779137287()                                                  
+Method_1246493435()                                                
+Method_2122815276()                                                    
+Method_1182545677()                                                    
+Method_443577622()                                                       
+Method_1031362354()                                         
+Method_538259455()                                             
+Method_105099135()                                            
+Method_872422077()                                                      
+Method_892414669()                                                       
+Method_1031602802()                                              
+
+
+module Shoulda # :nodoc:
+  module ActiveRecord # :nodoc:
+    # = Matchers for your active record models
+    #
+    # These matchers will test most of the validations and associations for your
+    # ActiveRecord models.
+    #
+    #   describe User do
+    #     it { should validate_presence_of(:name) }
+    #     it { should validate_presence_of(:phone_number) }
+    #     %w(abcd 1234).each do |value|
+    #       it { should_not allow_value(value).for(:phone_number) }
+    #     end
+    #     it { should allow_value("(123) 456-7890").for(:phone_number) }
+    #     it { should_not allow_mass_assignment_of(:password) }
+    #     it { should have_one(:profile) }
+    #     it { should have_many(:dogs) }
+    #     it { should have_many(:messes).through(:dogs) }
+    #     it { should belong_to(:lover) }
+    #   end
+    #
+    module Matchers
+    end
+  end
+end
+
+
+ 

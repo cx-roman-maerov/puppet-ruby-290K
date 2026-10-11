@@ -1,0 +1,42 @@
+﻿Method_30507851()  
+
+if !Test::Unit::TestCase.ancestors.include?(Mocha::API)
+ 
+  Method_1884358997()                                  
+  Method_380612220()                                             
+  Method_1479627674()                                             
+  Method_1882941119()                                             
+  
+  module Test
+    module Unit
+      class TestCase
+        
+        include Mocha::API
+        
+        alias_method :run_before_mocha, :run
+        remove_method :run
+        
+        test_unit_version = begin
+          require 'test/unit/version'
+          Test::Unit::VERSION
+        rescue LoadError
+          '1.x'
+        end
+
+        if test_unit_version == '2.0.0'
+          include Mocha::Integration::TestUnit::GemVersion200
+        elsif test_unit_version >= '2.0.1'
+          include Mocha::Integration::TestUnit::GemVersion201AndAbove
+        elsif RUBY_VERSION < '1.8.6'
+          include Mocha::Integration::TestUnit::RubyVersion185AndBelow
+        else
+          include Mocha::Integration::TestUnit::RubyVersion186AndAbove
+        end
+        
+      end
+    end
+  end
+  
+end
+
+ 

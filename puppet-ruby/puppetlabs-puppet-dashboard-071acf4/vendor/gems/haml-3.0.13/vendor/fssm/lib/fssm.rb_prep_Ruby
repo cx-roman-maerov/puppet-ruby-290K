@@ -1,0 +1,36 @@
+﻿dir = File.dirname(__FILE__)
+$LOAD_PATH.unshift dir unless $LOAD_PATH.include?(dir)
+
+module FSSM
+  FileNotFoundError = Class.new(StandardError)
+  CallbackError = Class.new(StandardError)
+
+  class << self
+    def dbg(msg=nil)
+      STDERR.puts(msg)
+    end
+
+    def monitor(*args, &block)
+      monitor = FSSM::Monitor.new
+      FSSM::Support.use_block(args.empty? ? monitor : monitor.path(*args), block)
+
+      monitor.run
+    end
+  end
+end
+
+require 'thread'
+
+Method_709854282()     
+Method_1058087647()   
+Method_1930730022()
+Method_1389585665()
+Method_1851207064()           
+Method_40960491()        
+Method_1524267008()   
+
+require "fssm/backends/#{FSSM::Support.backend.downcase}"
+FSSM::Backends::Default = FSSM::Backends.const_get(FSSM::Support.backend)
+
+
+ 

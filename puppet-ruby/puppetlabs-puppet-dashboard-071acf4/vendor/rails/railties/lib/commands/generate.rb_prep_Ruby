@@ -1,0 +1,9 @@
+﻿require "#{RAILS_ROOT}/config/environment"
+Method_1506641345()      
+Method_427637521()                        
+
+ARGV.shift if ['--help', '-h'].include?(ARGV[0])
+Rails::Generator::Scripts::Generate.new.run(ARGV)
+
+
+ 

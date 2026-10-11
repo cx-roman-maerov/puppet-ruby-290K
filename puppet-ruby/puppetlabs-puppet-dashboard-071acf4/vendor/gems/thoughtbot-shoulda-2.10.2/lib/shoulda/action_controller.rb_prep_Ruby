@@ -1,0 +1,29 @@
+﻿Method_1700944719()
+Method_612596557()                          
+Method_376455819()                        
+
+module Test # :nodoc: all
+  module Unit
+    class TestCase
+      include Shoulda::ActionController::Matchers
+      extend Shoulda::ActionController::Macros
+    end
+  end
+end
+
+Method_848462654()                        
+Method_2115485139()                       
+
+module ActionController #:nodoc: all
+  module Integration
+    class Session
+      include Shoulda::Assertions
+      include Shoulda::Helpers
+      include Shoulda::ActiveRecord::Assertions
+      include Shoulda::ActionMailer::Assertions
+    end
+  end
+end
+
+
+ 

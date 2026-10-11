@@ -1,0 +1,4 @@
+﻿class DynamicName__0 < Authlogic::Session::Base
+end
+
+ 

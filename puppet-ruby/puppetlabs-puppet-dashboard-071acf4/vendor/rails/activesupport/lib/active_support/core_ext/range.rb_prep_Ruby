@@ -1,0 +1,14 @@
+﻿Method_1274073631()                                
+Method_1162819662()                             
+Method_599443772()                                   
+Method_716660091()                                    
+
+class Range #:nodoc:
+  include ActiveSupport::CoreExtensions::Range::Conversions
+  include ActiveSupport::CoreExtensions::Range::Overlaps
+  include ActiveSupport::CoreExtensions::Range::IncludeRange
+  include ActiveSupport::CoreExtensions::Range::BlocklessStep
+end
+
+
+ 

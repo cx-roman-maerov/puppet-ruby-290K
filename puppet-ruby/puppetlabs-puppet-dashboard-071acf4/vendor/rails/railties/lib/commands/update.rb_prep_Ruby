@@ -1,0 +1,7 @@
+﻿require "#{RAILS_ROOT}/config/environment"
+Method_1506641345()      
+Method_1159084167()                     
+Rails::Generator::Scripts::Update.new.run(ARGV)
+
+
+ 

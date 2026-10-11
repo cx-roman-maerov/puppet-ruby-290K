@@ -1,0 +1,15 @@
+﻿require 'spec_helper'
+
+describe "/DynamicName__132/DynamicName__133" do
+  before(:each) do
+    render 'DynamicName__132/DynamicName__133'
+  end
+
+  #Delete this example and add some real ones or delete this file
+  it "should tell you where to find the file" do
+    response.should have_tag('p', %r[Find me in app/views/DynamicName__132/DynamicName__133])
+  end
+end
+
+
+ 

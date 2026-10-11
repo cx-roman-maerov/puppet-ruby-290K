@@ -1,0 +1,29 @@
+﻿begin
+  require_dependency 'application_controller'
+rescue MissingSourceFile
+  require_dependency 'application'
+end
+require 'rack/utils'
+
+require 'action_controller/test_process'
+require 'action_controller/integration'
+require 'active_support/test_case'
+require 'active_record/fixtures' if defined?(ActiveRecord::Base)
+
+require 'spec/test/unit'
+
+Method_893874221()           
+Method_1699538363()       
+Method_1950586760()         
+Method_156080696()             
+Method_1365501937()                  
+
+Spec::Example::ExampleGroupFactory.default(ActiveSupport::TestCase)
+
+if ActionView::Base.respond_to?(:cache_template_extensions)
+  ActionView::Base.cache_template_extensions = false
+end
+
+
+
+ 

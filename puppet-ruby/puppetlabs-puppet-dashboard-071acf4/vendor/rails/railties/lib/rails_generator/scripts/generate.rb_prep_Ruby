@@ -1,0 +1,10 @@
+﻿Method_1830497241()         
+
+module Rails::Generator::Scripts
+  class Generate < Base
+    mandatory_options :command => :create
+  end
+end
+
+
+ 

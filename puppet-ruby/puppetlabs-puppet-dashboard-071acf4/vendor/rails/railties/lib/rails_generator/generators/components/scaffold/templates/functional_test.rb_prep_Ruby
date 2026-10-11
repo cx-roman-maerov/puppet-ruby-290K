@@ -1,0 +1,48 @@
+﻿require 'test_helper'
+
+class DynamicName__632ControllerTest < ActionController::TestCase
+  test "should get index" do
+    get :index
+    assert_response :success
+    assert_not_nil assigns(:DynamicName__633)
+  end
+
+  test "should get new" do
+    get :new
+    assert_response :success
+  end
+
+  test "should create DynamicName__634" do
+    assert_difference('DynamicName__635.count') do
+      post :create, :DynamicName__634 => { }
+    end
+
+    assert_redirected_to DynamicName__634_path(assigns(:DynamicName__634))
+  end
+
+  test "should show DynamicName__634" do
+    get :show, :id => DynamicName__633(:one).to_param
+    assert_response :success
+  end
+
+  test "should get edit" do
+    get :edit, :id => DynamicName__633(:one).to_param
+    assert_response :success
+  end
+
+  test "should update DynamicName__634" do
+    put :update, :id => DynamicName__633(:one).to_param, :DynamicName__634 => { }
+    assert_redirected_to DynamicName__634_path(assigns(:DynamicName__634))
+  end
+
+  test "should destroy DynamicName__634" do
+    assert_difference('DynamicName__635.count', -1) do
+      delete :destroy, :id => DynamicName__633(:one).to_param
+    end
+
+    assert_redirected_to DynamicName__633_path
+  end
+end
+
+
+ 

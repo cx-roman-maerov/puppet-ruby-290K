@@ -1,0 +1,8 @@
+﻿Method_3962974()                   
+
+module SessionTest
+  class CallbacksTest < ActiveSupport::TestCase
+  end
+end
+
+ 

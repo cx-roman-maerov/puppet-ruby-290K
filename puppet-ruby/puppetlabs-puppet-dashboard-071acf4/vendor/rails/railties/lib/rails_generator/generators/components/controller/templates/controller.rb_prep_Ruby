@@ -1,0 +1,10 @@
+﻿class DynamicName__573Controller < ApplicationController
+DynamicName__574
+  def DynamicName__575
+  end
+
+DynamicName__576
+end
+
+
+ 

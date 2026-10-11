@@ -1,0 +1,28 @@
+﻿require 'spec_helper'
+
+describe DynamicName__124Controller do
+
+DynamicName__125
+  #Delete this example and add some real ones
+DynamicName__126
+  #Delete these examples and add some real ones
+DynamicName__127
+  it "should use DynamicName__124Controller" do
+    controller.should be_an_instance_of(DynamicName__124Controller)
+  end
+
+DynamicName__128
+DynamicName__129
+
+  describe "GET 'DynamicName__130'" do
+    it "should be successful" do
+      get 'DynamicName__130'
+      response.should be_success
+    end
+  end
+DynamicName__127
+DynamicName__127
+end
+
+
+ 

@@ -1,0 +1,18 @@
+﻿class DynamicName__583 < ActionMailer::Base
+  
+DynamicName__584
+
+  def DynamicName__585(sent_at = Time.now)
+    subject    'DynamicName__583#DynamicName__585'
+    recipients ''
+    from       ''
+    sent_on    sent_at
+    
+    body       :greeting => 'Hi,'
+  end
+DynamicName__586
+
+end
+
+
+ 

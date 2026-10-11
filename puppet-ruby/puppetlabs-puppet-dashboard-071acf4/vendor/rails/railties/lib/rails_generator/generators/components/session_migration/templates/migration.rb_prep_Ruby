@@ -1,0 +1,19 @@
+﻿class DynamicName__638 < ActiveRecord::Migration
+  def self.up
+    create_table :DynamicName__639 do |t|
+      t.string :session_id, :null => false
+      t.text :data
+      t.timestamps
+    end
+
+    add_index :DynamicName__639, :session_id
+    add_index :DynamicName__639, :updated_at
+  end
+
+  def self.down
+    drop_table :DynamicName__639
+  end
+end
+
+
+ 

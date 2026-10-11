@@ -1,0 +1,10 @@
+﻿Method_385487135()
+Method_1928551050()                                    
+
+class Pathname#:nodoc:
+  extend ActiveSupport::CoreExtensions::Pathname::CleanWithin
+end
+
+
+
+ 

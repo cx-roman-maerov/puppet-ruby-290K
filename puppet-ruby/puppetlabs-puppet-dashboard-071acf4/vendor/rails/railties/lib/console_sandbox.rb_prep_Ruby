@@ -1,0 +1,9 @@
+﻿ActiveRecord::Base.connection.increment_open_transactions
+ActiveRecord::Base.connection.begin_db_transaction
+def at_exit
+  ActiveRecord::Base.connection.rollback_db_transaction
+  ActiveRecord::Base.connection.decrement_open_transactions
+end
+
+
+ 

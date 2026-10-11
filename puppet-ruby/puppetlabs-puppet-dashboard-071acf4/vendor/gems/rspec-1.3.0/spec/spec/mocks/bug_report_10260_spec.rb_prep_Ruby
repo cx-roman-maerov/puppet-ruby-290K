@@ -1,0 +1,11 @@
+﻿Method_1813034224()  
+
+describe "An RSpec Mock" do
+  it "should hide internals in its inspect representation" do
+    m = mock('cup')
+    m.inspect.should =~ /_____________________________________________/
+  end
+end
+
+
+ 

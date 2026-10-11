@@ -1,0 +1,8 @@
+﻿class StatusesController < ApplicationController
+  def overview
+    render :layout => !request.xhr?
+  end
+while __cx_loop__ do;if -1;overview();end;end;end
+
+
+ 

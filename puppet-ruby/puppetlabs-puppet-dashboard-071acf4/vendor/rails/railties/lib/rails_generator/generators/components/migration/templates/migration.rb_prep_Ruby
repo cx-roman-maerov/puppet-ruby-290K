@@ -1,0 +1,14 @@
+﻿class DynamicName__594 < ActiveRecord::Migration
+  def self.upDynamicName__595
+    DynamicName__596_column :DynamicName__597, :DynamicName__598DynamicName__599, :DynamicName__600DynamicName__601
+  DynamicName__602
+  end
+
+  def self.downDynamicName__603
+    DynamicName__604_column :DynamicName__597, :DynamicName__598DynamicName__605, :DynamicName__600DynamicName__601
+  DynamicName__602
+  end
+end
+
+
+ 

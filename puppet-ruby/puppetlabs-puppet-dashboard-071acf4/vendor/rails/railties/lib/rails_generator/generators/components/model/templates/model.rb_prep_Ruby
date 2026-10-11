@@ -1,0 +1,8 @@
+﻿class DynamicName__613 < ActiveRecord::Base
+DynamicName__614
+  belongs_to :DynamicName__615
+DynamicName__616
+end
+
+
+ 

@@ -1,0 +1,375 @@
+﻿
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //          
+function moveProgressBar(percentDone) {
+  document.getElementById("rspec-header").style.width = percentDone +"%";
+}
+function makeRed(element_id) {
+  document.getElementById(element_id).style.background = '#C40D0D';
+  document.getElementById(element_id).style.color = '#FFFFFF';
+}
+
+function makeYellow(element_id) {
+  if (element_id == "rspec-header" && document.getElementById(element_id).style.background != '#C40D0D')
+  {
+    document.getElementById(element_id).style.background = '#FAF834';
+    document.getElementById(element_id).style.color = '#000000';
+  }
+  else
+  {
+    document.getElementById(element_id).style.background = '#FAF834';
+    document.getElementById(element_id).style.color = '#000000';
+  }
+}
+
+    //    
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    moveProgressBar('5.8');
+
+                                    makeRed('rspec-header');
+                                    makeRed('example_group_1');
+                                    moveProgressBar('11.7');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    moveProgressBar('17.6');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    moveProgressBar('23.5');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    moveProgressBar('29.4');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    makeRed('example_group_2');
+                                    moveProgressBar('35.2');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    moveProgressBar('41.1');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    moveProgressBar('47.0');
+
+
+
+
+
+
+                                    moveProgressBar('52.9');
+
+                                    moveProgressBar('58.8');
+
+                                    moveProgressBar('64.7');
+
+
+
+
+
+
+                                    moveProgressBar('70.5');
+
+                                    moveProgressBar('76.4');
+
+                                    moveProgressBar('82.3');
+
+
+
+
+
+
+                                    makeYellow('example_group_6');
+                                    moveProgressBar('88.2');
+
+
+
+
+
+
+                                    makeYellow('example_group_7');
+                                    moveProgressBar('94.1');
+
+
+
+
+
+
+                                    makeYellow('example_group_8');
+                                    moveProgressBar('100.0');
+
+
+
+                                document.getElementById('duration').innerHTML = "Finished in <strong>x seconds</strong>";
+                                document.getElementById('totals').innerHTML = "17 examples, 6 failures, 3 pending";
+
+
+
+
+
+
+
+ 

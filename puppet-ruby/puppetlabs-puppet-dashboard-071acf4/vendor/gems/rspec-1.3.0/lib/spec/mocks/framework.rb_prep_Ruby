@@ -1,0 +1,18 @@
+﻿# Require everything except the global extensions of class and object. This
+# supports wrapping rspec's mocking functionality without invading every
+# object in the system.
+
+Method_127644344()          
+Method_1951188829()                   
+Method_815302671()                  
+Method_1026906570()       
+Method_1847544276()      
+Method_686971820()                       
+Method_202834380()                      
+Method_703508986()              
+Method_1134238215()        
+Method_595903218()                  
+Method_1464367192()       
+
+
+ 

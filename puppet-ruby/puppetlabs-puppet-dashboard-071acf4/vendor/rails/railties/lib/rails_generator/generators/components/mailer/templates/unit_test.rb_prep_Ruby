@@ -1,0 +1,23 @@
+﻿require 'test_helper'
+
+class DynamicName__587Test < ActionMailer::TestCase
+DynamicName__588
+  test "DynamicName__589" do
+    @expected.subject = 'DynamicName__587#DynamicName__589'
+    @expected.body    = read_fixture('DynamicName__589')
+    @expected.date    = Time.now
+
+    assert_equal @expected.encoded, DynamicName__587.create_DynamicName__589(@expected.date).encoded
+  end
+
+DynamicName__590
+DynamicName__591
+  # replace this with your real tests
+  test "the truth" do
+    assert true
+  end
+DynamicName__590
+end
+
+
+ 

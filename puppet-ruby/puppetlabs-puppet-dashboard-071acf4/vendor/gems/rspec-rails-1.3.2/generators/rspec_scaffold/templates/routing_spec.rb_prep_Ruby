@@ -1,0 +1,36 @@
+﻿require 'spec_helper'
+
+describe DynamicName__186Controller do
+  describe "routing" do
+    it "recognizes and generates #index" do
+      { :get => "/DynamicName__187" }.should route_to(:controller => "DynamicName__187", :action => "index")
+    end
+
+    it "recognizes and generates #new" do
+      { :get => "/DynamicName__187/new" }.should route_to(:controller => "DynamicName__187", :action => "new")
+    end
+
+    it "recognizes and generates #show" do
+      { :get => "/DynamicName__187/1" }.should route_to(:controller => "DynamicName__187", :action => "show", :id => "1")
+    end
+
+    it "recognizes and generates #edit" do
+      { :get => "/DynamicName__187/1/edit" }.should route_to(:controller => "DynamicName__187", :action => "edit", :id => "1")
+    end
+
+    it "recognizes and generates #create" do
+      { :post => "/DynamicName__187" }.should route_to(:controller => "DynamicName__187", :action => "create") 
+    end
+
+    it "recognizes and generates #update" do
+      { :put => "/DynamicName__187/1" }.should route_to(:controller => "DynamicName__187", :action => "update", :id => "1") 
+    end
+
+    it "recognizes and generates #destroy" do
+      { :delete => "/DynamicName__187/1" }.should route_to(:controller => "DynamicName__187", :action => "destroy", :id => "1") 
+    end
+  end
+end
+
+
+ 

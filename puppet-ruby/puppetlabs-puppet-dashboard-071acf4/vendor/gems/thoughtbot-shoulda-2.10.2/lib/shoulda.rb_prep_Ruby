@@ -1,0 +1,12 @@
+﻿module Shoulda
+  VERSION = "2.10.2"
+end
+
+if defined? Spec
+  Method_704331326()     
+else
+  Method_412479956()         
+end
+
+
+ 

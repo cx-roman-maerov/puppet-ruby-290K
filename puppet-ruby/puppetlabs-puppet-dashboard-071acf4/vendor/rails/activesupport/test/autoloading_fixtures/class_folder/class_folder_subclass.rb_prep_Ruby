@@ -1,0 +1,6 @@
+﻿class             ClassFolderSubclass < ClassFolder
+  ConstantInClassFolder
+end
+
+
+ 

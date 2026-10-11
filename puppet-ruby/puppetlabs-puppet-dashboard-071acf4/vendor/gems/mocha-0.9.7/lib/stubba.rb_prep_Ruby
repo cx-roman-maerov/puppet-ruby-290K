@@ -1,0 +1,7 @@
+﻿# for backwards compatibility
+Method_316644575()
+Method_913817637()         
+Mocha::Deprecation.warning "Method_514337306() is no longer needed and stubba.rb will soon be removed"
+
+
+ 

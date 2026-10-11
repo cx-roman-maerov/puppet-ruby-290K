@@ -1,0 +1,12 @@
+﻿Method_2026171055()                               
+Method_962543329()                                   
+Method_1293003774()                           
+
+class Integer #:nodoc:
+  include ActiveSupport::CoreExtensions::Integer::EvenOdd
+  include ActiveSupport::CoreExtensions::Integer::Inflections
+  include ActiveSupport::CoreExtensions::Integer::Time
+end
+
+
+ 

@@ -1,0 +1,21 @@
+﻿Method_868487282()
+Method_1704681607()          
+Method_1137094555()   
+
+module Rack
+  module Handler
+    class Thin
+      def self.run(app, options={})
+        app = Rack::Chunked.new(Rack::ContentLength.new(app))
+        server = ::Thin::Server.new(options[:Host] || '0.0.0.0',
+                                    options[:Port] || 8080,
+                                    app)
+        yield server if block_given?
+        server.start
+      end
+    end
+  end
+end
+
+
+ 

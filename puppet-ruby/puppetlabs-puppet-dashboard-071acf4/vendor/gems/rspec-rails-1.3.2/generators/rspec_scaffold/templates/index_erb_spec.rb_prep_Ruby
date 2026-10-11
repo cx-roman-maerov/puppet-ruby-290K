@@ -1,0 +1,30 @@
+﻿require 'spec_helper'
+
+DynamicName__157
+describe "/DynamicName__158/index.DynamicName__159" do
+  include DynamicName__160Helper
+
+  before(:each) do
+    assigns[:DynamicName__158] = [
+DynamicName__161
+      stub_model(DynamicName__162DynamicName__163
+DynamicName__164
+        :DynamicName__165 => DynamicName__166DynamicName__167
+DynamicName__168
+DynamicName__169
+      DynamicName__170
+DynamicName__168
+DynamicName__168
+    ]
+  end
+
+  it "renders a list of DynamicName__158" do
+    render
+DynamicName__171
+    response.should have_tag("tr>td", DynamicName__166.to_s, 2)
+DynamicName__168
+  end
+end
+
+
+ 

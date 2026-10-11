@@ -1,0 +1,10 @@
+﻿Method_119380577()                              
+Method_117990354()                          
+
+class Float #:nodoc:
+  include ActiveSupport::CoreExtensions::Float::Rounding
+  include ActiveSupport::CoreExtensions::Float::Time
+end
+
+
+ 

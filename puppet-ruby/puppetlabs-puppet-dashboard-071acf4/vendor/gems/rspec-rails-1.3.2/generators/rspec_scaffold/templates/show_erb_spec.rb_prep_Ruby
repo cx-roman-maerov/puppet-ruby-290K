@@ -1,0 +1,25 @@
+﻿require 'spec_helper'
+
+DynamicName__188
+describe "/DynamicName__189/show.DynamicName__190" do
+  include DynamicName__191Helper
+  before(:each) do
+    assigns[:DynamicName__192] = @DynamicName__192 = stub_model(DynamicName__193DynamicName__194
+DynamicName__195
+      :DynamicName__196 => DynamicName__197DynamicName__198
+DynamicName__199
+DynamicName__200
+    )
+DynamicName__199
+  end
+
+  it "renders attributes in <p>" do
+    render
+DynamicName__201
+    response.should have_text(/DynamicName__202/)
+DynamicName__199
+  end
+end
+
+
+ 

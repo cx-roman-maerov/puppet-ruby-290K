@@ -1,0 +1,1213 @@
+﻿#!/usr/bin/env ruby
+Method_2050385894()             
+
+class ConversionTest < Test::Unit::TestCase
+  def test_basic
+    assert_renders %{
+foo bar
+  baz: bang
+  bip: bop
+}, %{
+foo bar \{
+  baz: bang;
+  bip: bop; \}
+}
+    assert_renders %{
+foo bar
+  :baz bang
+  :bip bop
+}, %{
+foo bar \{
+  baz: bang;
+  bip: bop; \}
+}, :old => true
+  end
+
+  def test_empty_selector
+    assert_renders "foo bar", "foo bar {}"
+  end
+
+  def test_empty_directive
+    assert_scss_to_sass "@media screen", "@media screen {}"
+    assert_scss_to_scss "@media screen {}"
+  end
+
+  def test_empty_control_directive
+    assert_renders "@if false", "@if false {}"
+  end
+
+  def test_nesting
+    assert_renders %{
+foo bar
+  baz bang
+    baz: bang
+    bip: bop
+  blat: boo
+}, %{
+foo bar \{
+  baz bang \{
+    baz: bang;
+    bip: bop; \}
+  blat: boo; \}
+}
+  end
+
+  def test_nesting_with_parent_ref
+    assert_renders %{
+foo bar
+  &:hover
+    baz: bang
+}, %{
+foo bar \{
+  &:hover \{
+    baz: bang; \} \}
+}
+  end
+
+  def test_selector_interpolation
+    assert_renders %{
+foo \#{$bar + "baz"}.bip
+  baz: bang
+}, %{
+foo \#{$bar + "baz"}.bip \{
+  baz: bang; \}
+}
+  end
+
+  def test_multiline_selector_with_commas
+    assert_renders %{
+foo bar,
+baz bang
+  baz: bang
+}, %{
+foo bar,
+baz bang \{
+  baz: bang; \}
+}
+
+    assert_renders %{
+blat
+  foo bar,
+  baz bang
+    baz: bang
+}, %{
+blat \{
+  foo bar,
+  baz bang \{
+    baz: bang; \} \}
+}
+  end
+
+  def test_multiline_selector_without_commas
+    assert_scss_to_sass %{
+foo bar baz bang
+  baz: bang
+}, %{
+foo bar
+baz bang \{
+  baz: bang; \}
+}
+
+    assert_scss_to_scss %{
+foo bar
+baz bang \{
+  baz: bang; \}
+}
+  end
+
+  def test_escaped_selector
+    assert_renders %{
+foo bar
+  \\:hover
+    baz: bang
+}, %{
+foo bar \{
+  :hover \{
+    baz: bang; \} \}
+}
+  end
+
+  def test_property_name_interpolation
+    assert_renders %{
+foo bar
+  baz\#{$bang}bip\#{$bop}: 12
+}, %{
+foo bar \{
+  baz\#{$bang}bip\#{$bop}: 12; }
+}
+  end
+
+  def test_property_name_interpolation
+    assert_renders %{
+foo bar
+  baz\#{$bang}bip\#{$bop}: 12
+}, %{
+foo bar \{
+  baz\#{$bang}bip\#{$bop}: 12; }
+}
+  end
+
+  def test_property_value_interpolation
+    assert_renders %{
+foo bar
+  baz: 12 \#{$bang} bip \#{"bop"} blat
+}, %{
+foo bar \{
+  baz: 12 \#{$bang} bip \#{"bop"} blat; }
+}
+  end
+
+  def test_dynamic_properties
+    assert_renders %{
+foo bar
+  baz: 12 $bang "bip"
+}, %{
+foo bar \{
+  baz: 12 $bang "bip"; \}
+}
+
+    assert_sass_to_scss %{
+foo bar \{
+  baz: 12 $bang bip; \}
+}, %{
+foo bar
+  baz= 12 $bang "bip"
+}
+  end
+
+  def test_dynamic_properties_with_old
+    assert_renders %{
+foo bar
+  :baz 12 $bang "bip"
+}, %{
+foo bar \{
+  baz: 12 $bang "bip"; \}
+}, :old => true
+
+    assert_sass_to_scss %{
+foo bar \{
+  baz: 12 $bang bip; \}
+}, %{
+foo bar
+  :baz= 12 $bang "bip"
+}, :old => true
+  end
+
+  def test_multiline_properties
+    assert_scss_to_sass %{
+foo bar
+  baz: bip   bam         boon
+}, %{
+foo bar \{
+  baz:
+    bip
+  bam
+        boon; \}
+}
+
+    assert_scss_to_scss %{
+foo bar \{
+  baz: bip   bam         boon; \}
+}, %{
+foo bar \{
+  baz:
+    bip
+  bam
+        boon; \}
+}
+  end
+
+  def test_multiline_dynamic_properties
+    assert_scss_to_sass %{
+foo bar
+  baz: $bip "bam" 12px
+}, %{
+foo bar \{
+  baz:
+    $bip
+  "bam"
+        12px; \}
+}
+
+    assert_scss_to_scss %{
+foo bar \{
+  baz: $bip "bam" 12px; \}
+}, %{
+foo bar \{
+  baz:
+    $bip
+  "bam"
+        12px; \}
+}
+  end
+
+  def test_silent_comments
+    assert_renders %{
+// foo
+
+// bar
+
+// baz
+
+foo bar
+  a: b
+}, %{
+// foo
+
+// bar
+
+// baz
+
+foo bar \{
+  a: b; \}
+}
+
+    assert_renders %{
+// foo
+// bar
+//   baz
+// bang
+
+foo bar
+  a: b
+}, %{
+// foo
+// bar
+//   baz
+// bang
+
+foo bar \{
+  a: b; \}
+}
+
+    assert_sass_to_scss %{
+// foo
+// bar
+//   baz
+// bang
+
+foo bar \{
+  a: b; \}
+}, %{
+// foo
+// bar
+//   baz
+// bang
+
+foo bar
+  a: b
+}
+  end
+
+  def test_nested_silent_comments
+    assert_renders %{
+foo
+  bar: baz
+  // bip bop
+  // beep boop
+  bang: bizz
+  // bubble bubble
+  // toil trouble
+}, %{
+foo \{
+  bar: baz;
+  // bip bop
+  // beep boop
+  bang: bizz;
+  // bubble bubble
+  // toil trouble
+\}
+}
+
+    assert_sass_to_scss %{
+foo \{
+  bar: baz;
+  // bip bop
+  // beep boop
+  //   bap blimp
+  bang: bizz;
+  // bubble bubble
+  // toil trouble
+  //    gorp
+\}
+}, %{
+foo
+  bar: baz
+  // bip bop
+     beep boop
+       bap blimp
+  bang: bizz
+  // bubble bubble
+    toil trouble
+       gorp
+}
+  end
+
+  def test_loud_comments
+    assert_renders %{
+/* foo
+
+/* bar
+
+/* baz
+
+foo bar
+  a: b
+}, %{
+/* foo */
+
+/* bar */
+
+/* baz */
+
+foo bar \{
+  a: b; \}
+}
+
+    assert_scss_to_sass %{
+/* foo
+ * bar
+ *   baz
+ * bang
+
+foo bar
+  a: b
+}, %{
+/* foo
+   bar
+     baz
+   bang */
+
+foo bar \{
+  a: b; \}
+}
+
+    assert_scss_to_scss %{
+/* foo
+   bar
+     baz
+   bang */
+
+foo bar \{
+  a: b; \}
+}
+
+    assert_renders %{
+/* foo
+ * bar
+ *   baz
+ * bang
+
+foo bar
+  a: b
+}, %{
+/* foo
+ * bar
+ *   baz
+ * bang */
+
+foo bar \{
+  a: b; \}
+}
+  end
+
+  def test_nested_loud_comments
+    assert_renders %{
+foo
+  bar: baz
+  /* bip bop
+   * beep boop
+  bang: bizz
+  /* bubble bubble
+   * toil trouble
+}, %{
+foo \{
+  bar: baz;
+  /* bip bop
+   * beep boop */
+  bang: bizz;
+  /* bubble bubble
+   * toil trouble */ \}
+}
+
+    assert_sass_to_scss %{
+foo \{
+  bar: baz;
+  /* bip bop
+   * beep boop
+   *   bap blimp */
+  bang: bizz;
+  /* bubble bubble
+   * toil trouble
+   *    gorp */ \}
+}, %{
+foo
+  bar: baz
+  /* bip bop
+     beep boop
+       bap blimp
+  bang: bizz
+  /* bubble bubble
+    toil trouble
+       gorp
+}
+  end
+
+  def test_loud_comments_with_weird_indentation
+    assert_scss_to_sass %{
+foo
+  /*      foo
+   * bar
+   *     baz
+  a: b
+}, %{
+foo \{
+  /* foo
+bar
+    baz */
+  a: b; \}
+}
+
+    assert_sass_to_scss %{
+foo \{
+  /*      foo
+   * bar
+   *     baz */
+  a: b; \}
+}, %{
+foo
+  /*      foo
+     bar
+         baz
+  a: b
+}
+  end
+
+  def test_immediately_preceding_comments
+    assert_renders %{
+/* Foo
+ * Bar
+ * Baz
+.foo#bar
+  a: b
+}, %{
+/* Foo
+ * Bar
+ * Baz */
+.foo#bar \{
+  a: b; \}
+}
+
+    assert_renders %{
+// Foo
+// Bar
+// Baz
+=foo
+  a: b
+}, %{
+// Foo
+// Bar
+// Baz
+@mixin foo \{
+  a: b; \}
+}
+  end
+
+  def test_debug
+    assert_renders %{
+foo
+  @debug 12px
+  bar: baz
+}, %{
+foo \{
+  @debug 12px;
+  bar: baz; \}
+}
+  end
+
+  def test_directive_without_children
+    assert_renders %{
+foo
+  @foo #bar "baz"
+  bar: baz
+}, %{
+foo \{
+  @foo #bar "baz";
+  bar: baz; \}
+}
+  end
+
+  def test_directive_with_prop_children
+    assert_renders %{
+foo
+  @foo #bar "baz"
+    a: b
+    c: d
+
+  bar: baz
+}, %{
+foo \{
+  @foo #bar "baz" \{
+    a: b;
+    c: d; \}
+
+  bar: baz; \}
+}
+  end
+
+  def test_directive_with_rule_children
+    assert_renders %{
+foo
+  @foo #bar "baz"
+    #blat
+      a: b
+    .bang
+      c: d
+      e: f
+
+  bar: baz
+}, %{
+foo \{
+  @foo #bar "baz" \{
+    #blat \{
+      a: b; \}
+    .bang \{
+      c: d;
+      e: f; \} \}
+
+  bar: baz; \}
+}
+  end
+
+  def test_directive_with_rule_and_prop_children
+    assert_renders %{
+foo
+  @foo #bar "baz"
+    g: h
+    #blat
+      a: b
+    .bang
+      c: d
+      e: f
+    i: j
+
+  bar: baz
+}, %{
+foo \{
+  @foo #bar "baz" \{
+    g: h;
+    #blat \{
+      a: b; \}
+    .bang \{
+      c: d;
+      e: f; \}
+    i: j; \}
+
+  bar: baz; \}
+}
+  end
+
+  def test_for
+    assert_renders %{
+foo
+  @for $a from $b to $c
+    a: b
+  @for $c from 1 to 16
+    d: e
+    f: g
+}, %{
+foo \{
+  @for $a from $b to $c \{
+    a: b; \}
+  @for $c from 1 to 16 \{
+    d: e;
+    f: g; \} \}
+}
+  end
+
+  def test_while
+    assert_renders %{
+foo
+  @while flaz($a + $b)
+    a: b
+  @while 1
+    d: e
+    f: g
+}, %{
+foo \{
+  @while flaz($a + $b) \{
+    a: b; \}
+  @while 1 \{
+    d: e;
+    f: g; \} \}
+}
+  end
+
+  def test_if
+    assert_renders %{
+foo
+  @if $foo or $bar
+    a: b
+  @if $baz
+    d: e
+  @else if $bang
+    f: g
+  @else
+    h: i
+}, %{
+foo \{
+  @if $foo or $bar \{
+    a: b; \}
+  @if $baz \{
+    d: e; \}
+  @else if $bang \{
+    f: g; \}
+  @else \{
+    h: i; \} \}
+}
+  end
+
+  def test_import
+    assert_renders %{
+@import foo
+
+@import url(bar.css)
+
+foo
+  bar: baz
+}, %{
+@import "foo";
+
+@import url(bar.css);
+
+foo \{
+  bar: baz; \}
+}
+
+    assert_renders %{
+@import foo.css
+
+@import url(bar.css)
+
+foo
+  bar: baz
+}, %{
+@import "foo.css";
+
+@import url(bar.css);
+
+foo \{
+  bar: baz; \}
+}
+  end
+
+  def test_import_as_directive_in_sass
+    assert_equal "@import foo.css\n", to_sass('@import "foo.css"')
+  end
+
+  def test_import_as_directive_in_scss
+    assert_renders %{
+@import "foo.css" print
+}, %{
+@import "foo.css" print;
+}
+
+    assert_renders %{
+@import url(foo.css) screen, print
+}, %{
+@import url(foo.css) screen, print;
+}
+  end
+
+  def test_adjacent_imports
+    assert_renders %{
+@import foo.sass
+@import bar.scss
+@import baz
+}, %{
+@import "foo.sass";
+@import "bar.scss";
+@import "baz";
+}
+  end
+
+  def test_non_adjacent_imports
+    assert_renders %{
+@import foo.sass
+
+@import bar.scss
+
+@import baz
+}, %{
+@import "foo.sass";
+
+@import "bar.scss";
+
+@import "baz";
+}
+  end
+
+  def test_extend
+    assert_renders %{
+.foo
+  @extend .bar
+  @extend .baz:bang
+}, %{
+.foo \{
+  @extend .bar;
+  @extend .baz:bang; \}
+}
+  end
+
+  def test_argless_mixin_definition
+    assert_renders %{
+=foo-bar
+  baz
+    a: b
+}, %{
+@mixin foo-bar \{
+  baz \{
+    a: b; \} \}
+}
+
+    assert_scss_to_sass %{
+=foo-bar
+  baz
+    a: b
+}, %{
+@mixin foo-bar() \{
+  baz \{
+    a: b; \} \}
+}
+
+    assert_sass_to_scss %{
+@mixin foo-bar \{
+  baz \{
+    a: b; \} \}
+}, %{
+=foo-bar()
+  baz
+    a: b
+}
+  end
+
+  def test_mixin_definition_without_defaults
+    assert_renders %{
+=foo-bar($baz, $bang)
+  baz
+    a: $baz $bang
+}, %{
+@mixin foo-bar($baz, $bang) \{
+  baz \{
+    a: $baz $bang; \} \}
+}
+  end
+
+  def test_mixin_definition_with_defaults
+    assert_renders %{
+=foo-bar($baz, $bang: 12px)
+  baz
+    a: $baz $bang
+}, %{
+@mixin foo-bar($baz, $bang: 12px) \{
+  baz \{
+    a: $baz $bang; \} \}
+}
+
+    assert_scss_to_sass %{
+=foo-bar($baz, $bang: foo)
+  baz
+    a: $baz $bang
+}, %{
+@mixin foo-bar($baz, $bang = "foo") \{
+  baz \{
+    a: $baz $bang; \} \}
+}
+
+    assert_sass_to_scss %{
+@mixin foo-bar($baz, $bang: foo) \{
+  baz \{
+    a: $baz $bang; \} \}
+}, %{
+=foo-bar($baz, $bang = "foo")
+  baz
+    a: $baz $bang
+}
+  end
+
+  def test_argless_mixin_include
+    assert_renders %{
+foo
+  +foo-bar
+  a: blip
+}, %{
+foo \{
+  @include foo-bar;
+  a: blip; \}
+}
+  end
+
+  def test_mixin_include
+    assert_renders %{
+foo
+  +foo-bar(12px, "blaz")
+  a: blip
+}, %{
+foo \{
+  @include foo-bar(12px, "blaz");
+  a: blip; \}
+}
+  end
+
+  def test_variable_definition
+    assert_renders %{
+$var1: 12px + 15px
+
+foo
+  $var2: flaz(#abcdef)
+  val: $var1 $var2
+}, %{
+$var1: 12px + 15px;
+
+foo \{
+  $var2: flaz(#abcdef);
+  val: $var1 $var2; \}
+}
+
+    assert_sass_to_scss '$var: 12px $bar baz;', '$var = 12px $bar "baz"'
+  end
+
+  def test_guarded_variable_definition
+    assert_renders %{
+$var1: 12px + 15px !default
+
+foo
+  $var2: flaz(#abcdef) !default
+  val: $var1 $var2
+}, %{
+$var1: 12px + 15px !default;
+
+foo \{
+  $var2: flaz(#abcdef) !default;
+  val: $var1 $var2; \}
+}
+
+    assert_sass_to_scss '$var: 12px $bar baz !default;', '$var ||= 12px $bar "baz"'
+  end
+
+  def test_multiple_variable_definitions
+    assert_renders %{
+$var1: foo
+$var2: bar
+$var3: baz
+
+$var4: bip
+$var5: bap
+}, %{
+$var1: foo;
+$var2: bar;
+$var3: baz;
+
+$var4: bip;
+$var5: bap;
+}
+  end
+
+  def test_division_asserted_with_parens
+    assert_renders %{
+foo
+  a: (1px / 2px)
+}, %{
+foo \{
+  a: (1px / 2px); \}
+}
+  end
+
+  def test_division_not_asserted_when_unnecessary
+    assert_renders %{
+$var: 1px / 2px
+
+foo
+  a: $var
+}, %{
+$var: 1px / 2px;
+
+foo \{
+  a: $var; \}
+}
+
+    assert_renders %{
+$var: 1px
+
+foo
+  a: $var / 2px
+}, %{
+$var: 1px;
+
+foo \{
+  a: $var / 2px; \}
+}
+
+    assert_renders %{
+foo
+  a: 1 + 1px / 2px
+}, %{
+foo \{
+  a: 1 + 1px / 2px; \}
+}
+  end
+
+  def test_literal_slash
+    assert_renders %{
+foo
+  a: 1px / 2px
+}, %{
+foo \{
+  a: 1px / 2px; \}
+}
+  end
+
+  # Hacks
+
+  def test_declaration_hacks
+    assert_renders %{
+foo
+  _name: val
+  *name: val
+  #name: val
+  .name: val
+  name/**/: val
+  name/*\\**/: val
+  name: val
+}, %{
+foo \{
+  _name: val;
+  *name: val;
+  #name: val;
+  .name: val;
+  name/**/: val;
+  name/*\\**/: val;
+  name: val; \}
+}
+  end
+
+  def test_old_declaration_hacks
+    assert_renders %{
+foo
+  :_name val
+  :*name val
+  :#name val
+  :.name val
+  :name val
+}, %{
+foo \{
+  _name: val;
+  *name: val;
+  #name: val;
+  .name: val;
+  name: val; \}
+}, :old => true
+  end
+
+  def test_selector_hacks
+    assert_selector_renders = lambda do |s|
+      assert_renders %{
+#{s}
+  a: b
+}, %{
+#{s} \{
+  a: b; \}
+}
+    end
+
+    assert_selector_renders['> E']
+    assert_selector_renders['+ E']
+    assert_selector_renders['~ E']
+    assert_selector_renders['> > E']
+
+    assert_selector_renders['E*']
+    assert_selector_renders['E*.foo']
+    assert_selector_renders['E*:hover']
+  end
+
+  def test_disallowed_colon_hack
+    assert_raise(Sass::SyntaxError, '":foo: bar" is not allowed in the Sass syntax') do
+      to_sass("foo {:name: val;}", :syntax => :scss)
+    end
+  end
+
+  # Sass 3 Deprecation conversions
+
+  def test_simple_quoted_strings_unquoted_with_equals
+    assert_sass_to_scss '$var: 1px foo + bar baz;', '!var = 1px "foo" + "bar" baz'
+    assert_sass_to_scss '$var: -foo-bar;', '!var = "-foo-bar"'
+  end
+
+  def test_complex_quoted_strings_explicitly_unquoted_with_equals
+    assert_sass_to_scss '$var: 1px unquote("foo + bar") baz;', '!var = 1px "foo + bar" baz'
+    assert_sass_to_scss "$var: unquote('foo\"bar');", '!var = "foo\"bar"'
+  end
+
+  def test_division_asserted_with_equals
+    assert_sass_to_scss %{
+foo \{
+  a: (1px / 2px); \}
+}, %{
+foo
+  a = 1px / 2px
+}
+  end
+
+  def test_division_not_asserted_with_equals_when_unnecessary
+    assert_sass_to_scss %{
+$var: 1px / 2px;
+
+foo \{
+  a: $var; \}
+}, %{
+!var = 1px / 2px
+
+foo
+  a = !var
+}
+
+    assert_sass_to_scss %{
+$var: 1px;
+
+foo \{
+  a: $var / 2px; \}
+}, %{
+!var = 1px
+
+foo
+  a = !var / 2px
+}
+
+    assert_sass_to_scss %{
+foo \{
+  a: 1 + 1px / 2px; \}
+}, %{
+foo
+  a = 1 + 1px / 2px
+}
+  end
+
+  def test_nested_properties
+    assert_renders %{
+div
+  before: before
+  background:
+    color: blue
+    repeat: no-repeat
+  after: after
+}, %{
+div \{
+  before: before;
+  background: \{
+    color: blue;
+    repeat: no-repeat; \};
+  after: after; \}
+
+}
+  end
+
+  def test_dasherize
+    assert_sass_to_scss(%{
+@mixin under-scored-mixin($under-scored-arg: $under-scored-default) \{
+  bar: $under-scored-arg; \}
+
+div \{
+  foo: under-scored-fn($under-scored-var + "before\#{$another-under-scored-var}after");
+  @include under-scored-mixin($passed-arg);
+  selector-\#{$under-scored-interp}: bold; }
+
+@if $under-scored \{
+  @for $for-var from $from-var to $to-var \{
+    @while $while-var == true \{
+      $while-var: false; \} \} \}
+}, %{
+=under_scored_mixin($under_scored_arg: $under_scored_default)
+  bar: $under_scored_arg
+div
+  foo: under_scored_fn($under_scored_var + "before\#{$another_under_scored_var}after")
+  +under_scored_mixin($passed_arg)
+  selector-\#{$under_scored_interp}: bold
+@if $under_scored
+  @for $for_var from $from_var to $to_var
+    @while $while_var == true
+      $while_var : false
+}, :dasherize => true)
+  end
+
+  def test_sass2_var_in_property_interpolation
+assert_sass_to_scss %{
+foo \{
+  a: b \#{$c} d; }
+}, %{
+foo
+  a: b \#{!c} d
+}
+  end
+
+  def test_sass2_var_in_selector_interpolation
+assert_sass_to_scss %{
+foo-\#{$c} \{
+  a: b; \}
+}, %{
+foo-\#{!c}
+  a: b
+}
+  end
+
+         
+
+  def assert_sass_to_sass(sass, options = {})
+    assert_equal(sass.rstrip, to_sass(sass, options).rstrip,
+      "Expected Sass to transform to itself")
+  end
+
+  def assert_scss_to_sass(sass, scss, options = {})
+    assert_equal(sass.rstrip, to_sass(scss, options.merge(:syntax => :scss)).rstrip,
+      "Expected SCSS to transform to Sass")
+  end
+
+  def assert_scss_to_scss(scss, in_scss = nil, options = nil)
+    if in_scss.is_a?(Hash)
+      options = in_scss
+      in_scss = nil
+    end
+
+    in_scss ||= scss
+    options ||= {}
+
+    assert_equal(scss.rstrip, to_scss(in_scss, options.merge(:syntax => :scss)).rstrip,
+      "Expected SCSS to transform to #{scss == in_scss ? 'itself' : 'SCSS'}k")
+  end
+
+  def assert_sass_to_scss(scss, sass, options = {})
+    assert_equal(scss.rstrip, to_scss(sass, options).rstrip,
+      "Expected Sass to transform to SCSS")
+  end
+
+  def assert_renders(sass, scss, options = {})
+    assert_sass_to_sass(sass, options)
+    assert_scss_to_sass(sass, scss, options)
+    assert_scss_to_scss(scss, options)
+    assert_sass_to_scss(scss, sass, options)
+  end
+
+  def to_sass(scss, options = {})
+    Haml::Util.silence_haml_warnings do
+      Sass::Engine.new(scss, options).to_tree.to_sass(options)
+    end
+  end
+
+  def to_scss(sass, options = {})
+    Haml::Util.silence_haml_warnings do
+      Sass::Engine.new(sass, options).to_tree.to_scss(options)
+    end
+  end
+end
+
+
+ 

@@ -1,0 +1,28 @@
+﻿require 'spec_helper'
+
+DynamicName__172
+describe "/DynamicName__173/new.DynamicName__174" do
+  include DynamicName__175Helper
+
+  before(:each) do
+    assigns[:DynamicName__176] = stub_model(DynamicName__177,
+      :new_record? => trueDynamicName__178
+DynamicName__179
+      :DynamicName__180 => DynamicName__181DynamicName__182
+DynamicName__183
+    )
+  end
+
+  it "renders new DynamicName__176 form" do
+    render
+
+    response.should have_tag("form[action=?][method=post]", DynamicName__173_path) do
+DynamicName__184
+      with_tag("DynamicName__185#DynamicName__176_DynamicName__180[name=?]", "DynamicName__176[DynamicName__180]")
+DynamicName__183
+    end
+  end
+end
+
+
+ 

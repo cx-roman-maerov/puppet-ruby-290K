@@ -1,0 +1,8 @@
+﻿Method_866477609()                                           
+
+class CGI #:nodoc:
+  extend ActiveSupport::CoreExtensions::CGI::EscapeSkippingSlashes
+end
+
+
+ 

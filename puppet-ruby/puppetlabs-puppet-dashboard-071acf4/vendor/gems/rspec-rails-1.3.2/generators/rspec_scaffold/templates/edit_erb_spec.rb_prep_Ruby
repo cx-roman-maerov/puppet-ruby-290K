@@ -1,0 +1,28 @@
+﻿require 'spec_helper'
+
+DynamicName__142
+describe "/DynamicName__143/edit.DynamicName__144" do
+  include DynamicName__145Helper
+
+  before(:each) do
+    assigns[:DynamicName__146] = @DynamicName__146 = stub_model(DynamicName__147,
+      :new_record? => falseDynamicName__148
+DynamicName__149
+      :DynamicName__150 => DynamicName__151DynamicName__152
+DynamicName__153
+    )
+  end
+
+  it "renders the edit DynamicName__146 form" do
+    render
+
+    response.should have_tag("form[action=#{DynamicName__146_path(@DynamicName__146)}][method=post]") do
+DynamicName__154
+      with_tag('DynamicName__155#DynamicName__146_DynamicName__150[name=?]', "DynamicName__146[DynamicName__150]")
+DynamicName__153
+    end
+  end
+end
+
+
+ 

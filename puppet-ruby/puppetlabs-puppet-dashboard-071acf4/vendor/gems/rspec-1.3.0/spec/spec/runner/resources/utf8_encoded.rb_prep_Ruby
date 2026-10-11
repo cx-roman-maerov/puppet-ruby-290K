@@ -1,0 +1,11 @@
+﻿# encoding: utf-8
+module Custom
+  class ExampleUTF8ClassNameVarieta
+    def self.e
+      cosi = :pero
+    end
+  end
+end
+
+
+ 

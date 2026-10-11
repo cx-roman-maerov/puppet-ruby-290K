@@ -1,0 +1,15 @@
+﻿Method_1033342435()
+Method_178459966()                             
+Method_1028513491()                         
+Method_658511127()                                      
+Method_1272063774()                                    
+
+class DateTime
+  include ActiveSupport::CoreExtensions::Time::Behavior
+  include ActiveSupport::CoreExtensions::Time::Zones
+  include ActiveSupport::CoreExtensions::DateTime::Calculations
+  include ActiveSupport::CoreExtensions::DateTime::Conversions
+end
+
+
+ 

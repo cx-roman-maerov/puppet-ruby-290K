@@ -1,0 +1,144 @@
+﻿#--
+#   Copyright (C) 2006  Andrea Censi  <andrea (at) rubyforge.org>
+#
+# This file is part of Maruku.
+# 
+#   Maruku is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+# 
+#   Maruku is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+# 
+#   You should have received a copy of the GNU General Public License
+#   along with Maruku; if not, write to the Free Software
+#   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+#++
+
+require 'rexml/document'
+
+# :include:MaRuKu.txt
+module MaRuKu
+
+	module In
+		module Markdown
+			module SpanLevelParser; end
+			module BlockLevelParser; end
+		end
+		# more to come?
+	end
+
+	module Out
+		# Functions for exporting to MarkDown.
+		module Markdown; end
+		# Functions for exporting to HTML.
+		module HTML; end
+		# Functions for exporting to Latex
+		module Latex; end
+	end
+		
+	# These are strings utilities.
+	module Strings; end
+
+	module Helpers; end
+
+	module Errors; end
+		
+	class MDElement
+		include REXML
+		include MaRuKu
+		include Out::Markdown
+		include Out::HTML
+		include Out::Latex
+		include Strings
+		include Helpers
+		include Errors
+	end
+	
+	
+	class MDDocument < MDElement
+		include In::Markdown
+		include In::Markdown::SpanLevelParser
+		include In::Markdown::BlockLevelParser
+	end
+end
+
+# This is the public interface
+class Maruku < MaRuKu::MDDocument; end
+
+
+
+require 'rexml/document'
+
+# Structures definition
+Method_1426784499()        
+Method_793308334()                 
+
+Method_629035629()       
+# Less typing
+Method_1995237200()     
+
+# Code for parsing whole Markdown documents
+Method_1691244739()             
+
+# Ugly things kept in a closet
+Method_1914982624()          
+Method_1906717016()              
+Method_563087787()                   
+
+# A class for reading and sanitizing inline HTML
+Method_1215873027()               
+
+# Code for parsing Markdown block-level elements
+Method_966425288()                
+
+# Code for parsing Markdown span-level elements
+Method_2028943322()              
+Method_377922366()                      
+Method_1749424227()             
+
+Method_1424536601()              
+
+Method_674387014()         
+
+Method_1292172095()                  
+
+Method_1631161462()               
+
+# Code for creating a table of contents
+Method_8225311()    
+
+# Support for div Markdown extension
+Method_655244161()      
+
+# Version and URL
+Method_1598730125()     
+
+
+# Exporting to html
+Method_557564479()             
+
+# Exporting to latex
+Method_1775523404()             
+Method_667773947()                      
+Method_973090518()                       
+
+# Pretty print
+Method_720782089()                 
+
+# S5 slides
+Method_604073372()              
+Method_1148103599()             
+
+# Exporting to text: strips all formatting (not complete)
+Method_427208953()          
+
+# class Maruku is the global interface
+Method_1409065280()    
+
+
+
+ 

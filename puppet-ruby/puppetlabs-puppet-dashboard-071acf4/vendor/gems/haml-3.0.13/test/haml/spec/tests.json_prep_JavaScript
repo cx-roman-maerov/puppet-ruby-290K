@@ -1,0 +1,537 @@
+﻿
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                \n  //         \n    a();\n  //   \n</       \n<p></p>"
+    }
+
+  },
+
+  "interpolation": {
+
+    "interpolation inside inline content" : {
+      "haml" : "%p #{var}",
+      "html" : "<p>value</p>",
+      "locals" : {
+        "var" : "value"
+      }
+    },
+
+    "no interpolation when escaped" : {
+      "haml" : "%p \\#{var}",
+      "html" : "<p>#{var}</p>"
+    },
+
+    "interpolation when the escape character is escaped" : {
+      "haml" : "%p \\\\#{var}",
+      "html" : "<p>\\value</p>",
+      "locals" : {
+        "var" : "value"
+      }
+    },
+
+    "interpolation inside filtered content" : {
+      "haml" : ":plain\n  #{var} interpolated: #{var}",
+      "html" : "value interpolated: value",
+      "locals" : {
+        "var" : "value"
+      }
+    }
+
+  },
+
+  "HTML escaping" : {
+
+    "code following '&='" : {
+      "haml" : "&= '<\"&>'",
+      "html" : "&lt;&quot;&amp;&gt;"
+    },
+
+    "code following '=' when escape_haml is set to true" : {
+      "haml" : "= '<\"&>'",
+      "html" : "&lt;&quot;&amp;&gt;",
+      "config" : {
+        "escape_html" : "true"
+      }
+    },
+
+    "code following '!=' when escape_haml is set to true" : {
+      "haml" : "!= '<\"&>'",
+      "html" : "<\"&>",
+      "config" : {
+        "escape_html" : "true"
+      }
+    }
+
+  },
+
+  "Boolean attributes" : {
+
+    "boolean attribute with XHTML" : {
+      "haml" : "%input(checked=true)",
+      "html" : "<input checked='checked' />",
+      "config" : {
+        "format" : "xhtml"
+      }
+    },
+
+    "boolean attribute with HTML" : {
+      "haml" : "%input(checked=true)",
+      "html" : "<input checked>",
+      "config" : {
+        "format" : "html5"
+      }
+    }
+  }
+
+}
+ 
+
+ 

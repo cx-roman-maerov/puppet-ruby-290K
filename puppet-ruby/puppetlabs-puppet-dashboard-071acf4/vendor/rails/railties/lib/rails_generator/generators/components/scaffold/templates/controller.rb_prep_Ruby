@@ -1,0 +1,88 @@
+﻿class DynamicName__628Controller < ApplicationController
+  # GET /DynamicName__629
+  # GET /DynamicName__629.xml
+  def index
+    @DynamicName__629 = DynamicName__630.all
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render :xml => @DynamicName__629 }
+    end
+  end
+
+  # GET /DynamicName__629/1
+  # GET /DynamicName__629/1.xml
+  def show
+    @DynamicName__631 = DynamicName__630.find(params[:id])
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.xml  { render :xml => @DynamicName__631 }
+    end
+  end
+
+  # GET /DynamicName__629/new
+  # GET /DynamicName__629/new.xml
+  def new
+    @DynamicName__631 = DynamicName__630.new
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.xml  { render :xml => @DynamicName__631 }
+    end
+  end
+
+  # GET /DynamicName__629/1/edit
+  def edit
+    @DynamicName__631 = DynamicName__630.find(params[:id])
+  end
+
+  # POST /DynamicName__629
+  # POST /DynamicName__629.xml
+  def create
+    @DynamicName__631 = DynamicName__630.new(params[:DynamicName__631])
+
+    respond_to do |format|
+      if @DynamicName__631.save
+        flash[:notice] = 'DynamicName__630 was successfully created.'
+        format.html { redirect_to(@DynamicName__631) }
+        format.xml  { render :xml => @DynamicName__631, :status => :created, :location => @DynamicName__631 }
+      else
+        format.html { render :action => "new" }
+        format.xml  { render :xml => @DynamicName__631.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+
+  # PUT /DynamicName__629/1
+  # PUT /DynamicName__629/1.xml
+  def update
+    @DynamicName__631 = DynamicName__630.find(params[:id])
+
+    respond_to do |format|
+      if @DynamicName__631.update_attributes(params[:DynamicName__631])
+        flash[:notice] = 'DynamicName__630 was successfully updated.'
+        format.html { redirect_to(@DynamicName__631) }
+        format.xml  { head :ok }
+      else
+        format.html { render :action => "edit" }
+        format.xml  { render :xml => @DynamicName__631.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /DynamicName__629/1
+  # DELETE /DynamicName__629/1.xml
+  def destroy
+    @DynamicName__631 = DynamicName__630.find(params[:id])
+    @DynamicName__631.destroy
+
+    respond_to do |format|
+      format.html { redirect_to(DynamicName__629_url) }
+      format.xml  { head :ok }
+    end
+  end
+end
+
+
+ 

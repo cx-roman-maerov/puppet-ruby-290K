@@ -1,0 +1,13 @@
+﻿Method_1700944719()
+Method_1738770110()                 
+
+module Test # :nodoc: all
+  module Unit
+    class TestCase
+      extend Shoulda::ActionView::Macros
+    end
+  end
+end
+
+
+ 

@@ -1,0 +1,20 @@
+﻿Method_326705654()    
+Method_1047472586()             
+Method_267262923()               
+Method_366251247()        
+Method_1395073268()            
+Method_557123824()               
+Method_416173125()            
+
+module Sass
+  # SCSS is the CSS syntax for Sass.
+  # It parses into the same syntax tree as Sass,
+  # and generates the same sort of output CSS.
+  #
+  # This module contains code for the parsing of SCSS.
+  # The evaluation is handled by the broader {Sass} module.
+  module SCSS; end
+end
+
+
+ 

@@ -1,0 +1,134 @@
+﻿require 'spec_helper'
+
+describe DynamicName__136Controller do
+
+  def mock_DynamicName__137(stubs={})
+    @mock_DynamicName__137 ||= mock_model(DynamicName__138, stubs)
+  end
+
+  describe "GET index" do
+    it "assigns all DynamicName__139 as @DynamicName__139" do
+      DynamicName__138.stub(:find).with(:all).and_return([mock_DynamicName__137])
+      get :index
+      assigns[:DynamicName__140].should == [mock_DynamicName__137]
+    end
+  end
+
+  describe "GET show" do
+    it "assigns the requested DynamicName__137 as @DynamicName__137" do
+      DynamicName__138.stub(:find).with("37").and_return(mock_DynamicName__137)
+      get :show, :id => "37"
+      assigns[:DynamicName__137].should equal(mock_DynamicName__137)
+    end
+  end
+
+  describe "GET new" do
+    it "assigns a new DynamicName__137 as @DynamicName__137" do
+      DynamicName__138.stub(:new).and_return(mock_DynamicName__137)
+      get :new
+      assigns[:DynamicName__137].should equal(mock_DynamicName__137)
+    end
+  end
+
+  describe "GET edit" do
+    it "assigns the requested DynamicName__137 as @DynamicName__137" do
+      DynamicName__138.stub(:find).with("37").and_return(mock_DynamicName__137)
+      get :edit, :id => "37"
+      assigns[:DynamicName__137].should equal(mock_DynamicName__137)
+    end
+  end
+
+  describe "POST create" do
+
+    describe "with valid params" do
+      it "assigns a newly created DynamicName__137 as @DynamicName__137" do
+        DynamicName__138.stub(:new).with({'these' => 'params'}).and_return(mock_DynamicName__137(:save => true))
+        post :create, :DynamicName__137 => {:these => 'params'}
+        assigns[:DynamicName__137].should equal(mock_DynamicName__137)
+      end
+
+      it "redirects to the created DynamicName__137" do
+        DynamicName__138.stub(:new).and_return(mock_DynamicName__137(:save => true))
+        post :create, :DynamicName__137 => {}
+        response.should redirect_to(DynamicName__141_url(mock_DynamicName__137))
+      end
+    end
+
+    describe "with invalid params" do
+      it "assigns a newly created but unsaved DynamicName__137 as @DynamicName__137" do
+        DynamicName__138.stub(:new).with({'these' => 'params'}).and_return(mock_DynamicName__137(:save => false))
+        post :create, :DynamicName__137 => {:these => 'params'}
+        assigns[:DynamicName__137].should equal(mock_DynamicName__137)
+      end
+
+      it "re-renders the 'new' template" do
+        DynamicName__138.stub(:new).and_return(mock_DynamicName__137(:save => false))
+        post :create, :DynamicName__137 => {}
+        response.should render_template('new')
+      end
+    end
+
+  end
+
+  describe "PUT update" do
+
+    describe "with valid params" do
+      it "updates the requested DynamicName__137" do
+        DynamicName__138.should_receive(:find).with("37").and_return(mock_DynamicName__137)
+        mock_DynamicName__137.should_receive(:update_attributes).with({'these' => 'params'})
+        put :update, :id => "37", :DynamicName__137 => {:these => 'params'}
+      end
+
+      it "assigns the requested DynamicName__137 as @DynamicName__137" do
+        DynamicName__138.stub(:find).and_return(mock_DynamicName__137(:update_attributes => true))
+        put :update, :id => "1"
+        assigns[:DynamicName__137].should equal(mock_DynamicName__137)
+      end
+
+      it "redirects to the DynamicName__137" do
+        DynamicName__138.stub(:find).and_return(mock_DynamicName__137(:update_attributes => true))
+        put :update, :id => "1"
+        response.should redirect_to(DynamicName__141_url(mock_DynamicName__137))
+      end
+    end
+
+    describe "with invalid params" do
+      it "updates the requested DynamicName__137" do
+        DynamicName__138.should_receive(:find).with("37").and_return(mock_DynamicName__137)
+        mock_DynamicName__137.should_receive(:update_attributes).with({'these' => 'params'})
+        put :update, :id => "37", :DynamicName__137 => {:these => 'params'}
+      end
+
+      it "assigns the DynamicName__137 as @DynamicName__137" do
+        DynamicName__138.stub(:find).and_return(mock_DynamicName__137(:update_attributes => false))
+        put :update, :id => "1"
+        assigns[:DynamicName__137].should equal(mock_DynamicName__137)
+      end
+
+      it "re-renders the 'edit' template" do
+        DynamicName__138.stub(:find).and_return(mock_DynamicName__137(:update_attributes => false))
+        put :update, :id => "1"
+        response.should render_template('edit')
+      end
+    end
+
+  end
+
+  describe "DELETE destroy" do
+    it "destroys the requested DynamicName__137" do
+      DynamicName__138.should_receive(:find).with("37").and_return(mock_DynamicName__137)
+      mock_DynamicName__137.should_receive(:destroy)
+      delete :destroy, :id => "37"
+    end
+
+    it "redirects to the DynamicName__140 list" do
+      DynamicName__138.stub(:find).and_return(mock_DynamicName__137(:destroy => true))
+      delete :destroy, :id => "1"
+      response.should redirect_to(DynamicName__140_url)
+    end
+  end
+
+end
+
+
+ 

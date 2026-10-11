@@ -1,0 +1,9 @@
+﻿Method_1402606545()        
+
+module TimelineFu  
+end
+
+ActiveRecord::Base.send :include, TimelineFu::Fires
+
+
+ 

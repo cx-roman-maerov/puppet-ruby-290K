@@ -1,0 +1,8 @@
+﻿class NodeGroupsController < InheritedResources::Base
+  respond_to :html, :json
+
+  include SearchableIndex
+while __cx_loop__ do;end;end
+
+
+ 

@@ -1,0 +1,47 @@
+﻿Method_313065417()
+
+if Spec::Ruby.version.to_f >= 1.9
+  gem 'test-unit','= 1.2.3'
+end
+
+Method_1893722123()
+
+if Spec::Ruby.version.to_f >= 1.9
+  require 'test/unit/version'
+  if Test::Unit::VERSION > '1.2.3'
+    raise %{
+#{'*' * 50}
+Required: test-unit-1.2.3
+Loaded:   test-unit-#{Test::Unit::VERSION}
+
+With ruby-1.9, rspec-#{Spec::VERSION::STRING} requires test-unit-1.2.3, and
+tries to force it with "gem 'test-unit', '= 1.2.3'" in:
+
+  #{__FILE__}
+  
+Unfortunately, test-unit-#{Test::Unit::VERSION} was loaded anyway. While we are
+aware of this bug we have not been able to track down its source.
+Until we do, you have two alternatives:
+
+* uninstall test-unit-#{Test::Unit::VERSION}
+* use 'script/spec' instead of 'rake spec'
+#{'*' * 50}
+}
+  end
+end
+
+
+Method_772256235()            
+
+Method_476221226()                       
+Method_902660054()                                
+Method_293887883()                         
+#Method_772256235()                        
+Method_1705175369()                                   
+
+Spec::Example::ExampleGroupFactory.default(Test::Unit::TestCase)
+
+Test::Unit.run = true
+
+
+ 

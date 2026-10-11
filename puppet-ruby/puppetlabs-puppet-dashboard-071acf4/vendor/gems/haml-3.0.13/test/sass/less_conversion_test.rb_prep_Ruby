@@ -1,0 +1,635 @@
+﻿#!/usr/bin/env ruby
+Method_2050385894()             
+
+begin
+require 'sass/less'
+
+class LessConversionTest < Test::Unit::TestCase
+  def test_variable_declarations
+    assert_renders %{
+$var1: 2px 3px;
+$var2: $var1 + 7px;
+
+$var3: fizz;
+
+foo \{
+  prop: $var1 $var2 $var3; \}
+}, %{
+@var1: 2px 3px;
+@var2: @var1 + 7px;
+
+@var3: fizz;
+
+foo \{prop: @var1 @var2 @var3\}
+}
+  end
+
+  def test_nested_variable_declarations
+    assert_renders %{
+.foo \{
+  $var: 2px;
+  prop: $var; \}
+}, %{
+.foo \{
+  @var: 2px;
+  prop: @var; \}
+}
+  end
+
+  def test_import
+    path = relative_path_to(File.dirname(__FILE__) + "/templates/importee.less")
+    resolved_path = relative_path_to(File.dirname(__FILE__) + "/templates/importee")
+    assert_renders %{
+@import "#{resolved_path}";
+@import "#{resolved_path}";
+
+@import "#{resolved_path}";
+@import "#{resolved_path}";
+@import "#{resolved_path}";
+}, %{
+@import url(#{path});
+@import url("#{path}");
+
+@import url('#{path}');
+@import '#{path}';
+@import "#{path}";
+}
+  end
+
+  def test_mixins_found_through_import
+    path = relative_path_to(File.dirname(__FILE__) + "/templates/importee.less")
+    resolved_path = relative_path_to(File.dirname(__FILE__) + "/templates/importee")
+    assert_renders %{
+@import "#{resolved_path}";
+
+.baz \{
+  @extend .foo;
+  @include bar; \}
+}, %{
+@import "#{path}";
+
+.baz \{.foo; .bar;\}
+}
+  end
+
+  # Selectors
+
+  def test_element_selector
+    assert_renders %{
+foo \{
+  a: b; \}
+}, %{
+foo \{a: b\}
+}
+  end
+
+  def test_class_selector
+    assert_renders %{
+.foo \{
+  a: b; \}
+}, %{
+.foo \{a: b\}
+}
+  end
+
+  def test_id_selector
+    assert_renders %{
+#foo \{
+  a: b; \}
+}, %{
+#foo \{a: b\}
+}
+  end
+
+  def test_pseudoclass_selector
+    assert_renders %{
+:foo \{
+  a: b; \}
+}, %{
+:foo \{a: b\}
+}
+  end
+
+  def test_pseudoelement_selector
+    assert_renders %{
+::foo \{
+  a: b; \}
+}, %{
+::foo \{a: b\}
+}
+  end
+
+  def test_comma_selector
+    assert_renders %{
+foo, .bar .baz, :bang \{
+  a: b; \}
+}, %{
+foo, .bar .baz, :bang \{a: b\}
+}
+  end
+
+  def test_nested_comma_selector
+    assert_renders %{
+foo bar, .baz \{
+  .bang, &:bip bap \{
+    a: b; \} \}
+}, %{
+foo bar, .baz \{
+  .bang, :bip bap \{a: b\} \}
+}
+  end
+
+  def test_simple_selector_sequence
+    assert_renders %{
+a.foo#bar[attr=val] \{
+  a: b; \}
+}, %{
+a.foo#bar[attr=val] \{a: b\}
+}
+  end
+
+  def test_descendant_selector
+    assert_renders %{
+.foo .bar \{
+  a: b; \}
+}, %{
+.foo .bar \{a: b\}
+}
+  end
+
+  def test_child_selector
+    assert_renders %{
+.foo > .bar \{
+  a: b; \}
+}, %{
+.foo > .bar \{a: b\}
+}
+  end
+
+  def test_adjacent_selector
+    assert_renders %{
+.foo + .bar \{
+  a: b; \}
+}, %{
+.foo + .bar \{a: b\}
+}
+  end
+
+  def test_pseudoclass_in_sequence
+    assert_renders %{
+.foo:bar \{
+  a: b; \}
+}, %{
+.foo:bar \{a: b\}
+}
+  end
+
+  def test_pseudoelement_in_sequence
+    assert_renders %{
+.foo::bar \{
+  a: b; \}
+}, %{
+.foo::bar \{a: b\}
+}
+  end
+
+  # Properties
+
+  def test_space_separated_props
+    assert_renders %{
+foo \{
+  a: foo bar baz; \}
+}, %{
+foo \{a: foo bar baz\}
+}
+  end
+
+  def test_comma_separated_props
+    assert_renders %{
+foo \{
+  a: foo, bar, baz; \}
+}, %{
+foo \{a: foo, bar, baz\}
+}
+  end
+
+  def test_numbers
+    assert_renders %{
+foo \{
+  a: 1 2.3 -8 5px 3%; \}
+}, %{
+foo \{a: 1 2.3 -8 5px 3%\}
+}
+  end
+
+  def test_colors
+    assert_renders %{
+foo \{
+  a: red #abcdef blue; \}
+}, %{
+foo \{a: #f00 #abcdef blue\}
+}
+  end
+
+  def test_strings
+    assert_renders %{
+foo \{
+  a: "foo @var bar" "baz bang" "quote'quote" 'quote"quote'; \}
+}, %{
+foo \{a: "foo @var bar" 'baz bang' "quote'quote" 'quote"quote'\}
+}
+  end
+
+  def test_slash
+    assert_renders %{
+foo \{
+  a: small/8px 7em/8px;
+  b: 8/4;
+  c: (8 / 4); \}
+}, %{
+foo \{
+  a: small/8px 7em/8px;
+  b: 8/4;
+  c: 8 / 4; \}
+}
+  end
+
+  def test_url
+    assert_renders %{
+foo \{
+  a: url("http://foobar.com/fizzle.html?foo=bar&bar=baz");
+  b: url("http://foobar.com/fizzle.html?foo=bar&bar=baz");
+  c: url("http://foobar.com/fizzle.html?foo=bar&bar=baz"); \}
+}, %{
+foo \{
+  a: url(http://foobar.com/fizzle.html?foo=bar&bar=baz);
+  b: url("http://foobar.com/fizzle.html?foo=bar&bar=baz");
+  c: url('http://foobar.com/fizzle.html?foo=bar&bar=baz'); \}
+}
+  end
+
+  def test_functions
+    assert_renders %{
+foo \{
+  a: baz(12px) rgba(80, 70 120, 0.76);
+  b: faz(1px + 3px) bang($var, #aaaaaa * 3); \}
+}, %{
+foo \{
+  a: baz(12px) rgba(80, 70 120, 0.76);
+  b: faz(1px + 3px) bang(@var, #aaa * 3); \}
+}
+  end
+
+  def test_alpha_function
+    assert_renders %{
+foo \{
+  a: alpha(opacity=2px);
+  b: alpha(opacity = $var); \}
+}, %{
+foo \{
+  a: alpha(opacity=2px);
+  b: alpha(opacity=@var); \}
+}
+  end
+
+  def test_variables
+    assert_renders %{
+foo \{
+  a: $var1 $var-foo; \}
+}, %{
+foo \{a: @var1 @var-foo\}
+}
+  end
+
+  def test_operators
+    assert_renders %{
+foo \{
+  a: 1px + 2px;
+  b: #bbaa88 - #aa1122;
+  c: 5 * 3;
+  d: (8 / 4); \}
+}, %{
+foo \{
+  a: 1px + 2px;
+  b: #ba8 - #a12;
+  c: 5 * 3;
+  d: 8 / 4; \}
+}
+  end
+
+  def test_operator_precedence
+    assert_renders %{
+foo \{
+  a: 1 + 2 * 3 + 4;
+  b: 1 * 2 + 3 * 4;
+  c: 1 - 2 + 2 - 4;
+  d: 1 + 2 - 3 + 4;
+  e: 1 / 2 - 3 / 4;
+  f: 1 - 2 / 3 - 4;
+  g: 1 / 2 * 3 / 4; \}
+}, %{
+foo \{
+  a: 1 + 2 * 3 + 4;
+  b: 1 * 2 + 3 * 4;
+  c: 1 - 2 + 2 - 4;
+  d: 1 + 2 - 3 + 4;
+  e: 1 / 2 - 3 / 4;
+  f: 1 - 2 / 3 - 4;
+  g: 1 / 2 * 3 / 4; \}
+}
+  end
+
+  def test_operators_with_parens
+    assert_renders %{
+foo \{
+  a: 1px + 2px * 3;
+  b: (1px - 2px) / 3; \}
+}, %{
+foo \{
+  a: 1px + (2px * 3);
+  b: (1px - (2px)) / 3; \}
+}
+  end
+
+  def test_unary_minus
+    assert_renders %{
+foo \{
+  a: 1px + -3px; \}
+}, %{
+foo \{a: 1px + (- 3px)\}
+}
+  end
+
+  # Nested Rules
+
+  def test_single_nested_rule
+    assert_renders %{
+foo bar \{
+  a: b; \}
+}, %{
+foo \{bar \{a: b\}\}
+}
+  end
+
+  def test_single_nested_rule_with_props
+    assert_renders %{
+foo \{
+  bar \{
+    a: b; \}
+  c: d;
+  e: f; \}
+}, %{
+foo \{
+  bar \{a: b\}
+  c: d;
+  e: f; \}
+}
+  end
+
+  def test_two_nested_rules
+    assert_renders %{
+foo \{
+  bar \{
+    a: b; \}
+  baz \{
+    c: d; \} \}
+}, %{
+foo \{
+  bar \{a: b\}
+  baz \{c: d\} \}
+}
+  end
+
+  def test_two_nested_rules_with_props
+    assert_renders %{
+foo \{
+  bar \{
+    a: b; \}
+  baz \{
+    c: d; \}
+  e: f;
+  g: h; \}
+}, %{
+foo \{
+  bar \{a: b\}
+  baz \{c: d\}
+  e: f;
+  g: h; \}
+}
+  end
+
+  def test_nested_rules_with_combinators
+    assert_renders %{
+foo \{
+  > bar \{
+    a: b; \}
+  + baz \{
+    c: d; \} \}
+}, %{
+foo \{
+  > bar \{a: b\}
+  + baz \{c: d\} \}
+}
+  end
+
+  def test_nested_pseudo_rules
+    assert_renders %{
+foo \{
+  &:bar \{
+    a: b; \}
+  &::baz \{
+    c: d; \} \}
+}, %{
+foo \{
+  :bar \{a: b\}
+  ::baz \{c: d\} \}
+}
+  end
+
+  # Mixins
+
+  def test_class_inheritance
+    assert_renders %{
+.foo \{
+  a: b; \}
+
+.bar \{
+  @extend .foo; \}
+}, %{
+.foo \{a: b\}
+.bar \{.foo;\}
+}
+  end
+
+  def test_multiple_class_inheritance
+    assert_renders %{
+.foo \{
+  a: b; \}
+
+.bar \{
+  c: d; \}
+
+.baz \{
+  @extend .foo;
+  @extend .bar; \}
+}, %{
+.foo \{a: b\}
+.bar \{c: d\}
+.baz \{.foo, .bar;\}
+}
+  end
+
+  def test_pseudoclass_inheritance
+    assert_renders %{
+:foo \{
+  a: b; \}
+
+:bar \{
+  @extend :foo; \}
+}, %{
+:foo \{a: b\}
+:bar \{:foo;\}
+}
+  end
+
+  def test_multiple_pseudoclass_inheritance
+    assert_renders %{
+:foo:bar \{
+  a: b; \}
+
+:baz \{
+  @extend :foo:bar; \}
+}, %{
+:foo:bar \{a: b\}
+:baz \{:foo:bar;\}
+}
+  end
+
+  def test_abstract_mixin
+    assert_renders %{
+@mixin foo \{
+  a: b; \}
+
+.bar \{
+  @include foo; \}
+}, %{
+.foo() \{a: b\}
+.bar \{.foo;\}
+}
+  end
+
+  def test_mixin_with_args
+    assert_renders %{
+@mixin foo($a: 2px, $b: red) \{
+  a: $a; \}
+
+.bar \{
+  @include foo; \}
+}, %{
+.foo(@a: 2px, @b: #f00) \{a: @a\}
+.bar \{.foo;\}
+}
+
+    assert_renders %{
+@mixin foo($a: 2px + 3px, $b: red) \{
+  a: $a; \}
+
+.bar \{
+  @include foo(5px); \}
+}, %{
+.foo(@a: 2px + 3px, @b: #f00) \{a: @a\}
+.bar \{.foo(5px);\}
+}
+  end
+
+  ## Disallowed Mixins
+
+  def test_nested_mixin
+    assert_warning(%{
+}) {assert_renders %{
+Replacing ".foo .bar" with "@extend .bar"
+WARN
+.foo .bar \{
+  a: b; \}
+
+.bar \{
+  // .foo .bar;
+  @extend .bar; \}
+}, %{
+.foo .bar \{a: b\}
+.bar \{.foo .bar;\}
+}}ING: Sass doesn't support mixing in selector sequences.
+  end
+
+  def test_child_selector_mixin
+    assert_warning(%{
+}) {assert_renders %{
+Replacing "> .bar" with "@extend .bar"
+WARN
+.foo > .bar \{
+  a: b; \}
+
+.bar \{
+  // > .bar;
+  @extend .bar; \}
+}, %{
+.foo > .bar \{a: b\}
+.bar \{> .bar;\}
+}}ING: Sass doesn't support mixing in selector sequences.
+  end
+
+  # Accessors
+
+  def test_property_accessor
+    assert_warning(%{
+}) {assert_renders %{
+Ignoring .magic-box['content']
+WARN
+.magic-box \{
+  content: "gold"; \}
+
+.foo \{
+  content: /* .magic-box['content'] */; \}
+}, %{
+.magic-box \{content: "gold"\}
+.foo \{content: .magic-box['content']\}
+}}ING: Sass doesn't support attribute accessors.
+  end
+
+  def test_variable_accessor
+    assert_warning(%{
+}) {assert_renders %{
+Ignoring .magic-box[@content]
+WARN
+.magic-box \{
+  $content: "gold";
+  content: $content; \}
+
+.foo \{
+  content: /* .magic-box[@content] */; \}
+}, %{
+.magic-box \{@content: "gold"; content: @content\}
+.foo \{content: .magic-box[@content]\}
+}}ING: Sass doesn't support attribute accessors.
+  end
+
+         
+
+  def assert_renders(scss, less)
+    assert_equal(scss, Less::Engine.new(less).to_tree.to_sass_tree.to_scss)
+  end
+
+  # Necessary because Less can't import absolute files
+  def relative_path_to(file)
+    file = Pathname.new(file)
+    pwd = file.absolute? ? Dir.pwd : "."
+    file.relative_path_from(Pathname.new(pwd))
+  end
+end
+
+rescue LoadError => e
+puts "\nCouldn't require less, skipping some tests."
+end
+
+
+ 

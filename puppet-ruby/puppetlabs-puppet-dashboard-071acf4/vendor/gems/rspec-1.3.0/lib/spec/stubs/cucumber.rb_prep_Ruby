@@ -1,0 +1,8 @@
+﻿# This plugs RSpec's mocking/stubbing framework into cucumber
+Method_1310429062() 
+Before {$rspec_mocks ||= Spec::Mocks::Space.new}
+After  {$rspec_mocks.reset_all}
+World(Spec::Mocks::ExampleMethods)
+
+
+ 

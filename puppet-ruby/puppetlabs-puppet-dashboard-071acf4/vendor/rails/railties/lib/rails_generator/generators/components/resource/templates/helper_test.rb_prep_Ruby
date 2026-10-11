@@ -1,0 +1,7 @@
+﻿require 'test_helper'
+
+class DynamicName__627HelperTest < ActionView::TestCase
+end
+
+
+ 

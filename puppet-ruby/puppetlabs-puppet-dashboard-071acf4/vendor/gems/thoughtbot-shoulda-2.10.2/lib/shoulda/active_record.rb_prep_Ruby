@@ -1,0 +1,19 @@
+﻿Method_1700944719()
+Method_1645271256()                    
+Method_266674660()                      
+Method_848462654()                        
+Method_855792346()                    
+
+module Test # :nodoc: all
+  module Unit
+    class TestCase
+      include Shoulda::ActiveRecord::Helpers
+      include Shoulda::ActiveRecord::Matchers
+      include Shoulda::ActiveRecord::Assertions
+      extend Shoulda::ActiveRecord::Macros
+    end
+  end
+end
+
+
+ 

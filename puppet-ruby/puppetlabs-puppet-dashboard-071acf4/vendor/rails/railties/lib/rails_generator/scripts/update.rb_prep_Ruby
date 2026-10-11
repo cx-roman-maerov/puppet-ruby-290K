@@ -1,0 +1,15 @@
+﻿Method_1830497241()         
+
+module Rails::Generator::Scripts
+  class Update < Base
+    mandatory_options :command => :update
+
+             
+      def banner
+        "Usage: #{$0} [options] scaffold"
+      end
+  end
+end
+
+
+ 

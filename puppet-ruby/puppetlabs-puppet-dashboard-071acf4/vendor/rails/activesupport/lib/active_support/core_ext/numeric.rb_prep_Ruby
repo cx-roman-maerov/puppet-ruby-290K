@@ -1,0 +1,12 @@
+﻿Method_524351935()                            
+Method_1211718765()                            
+Method_220980517()                                   
+
+class Numeric #:nodoc:
+  include ActiveSupport::CoreExtensions::Numeric::Time 
+  include ActiveSupport::CoreExtensions::Numeric::Bytes
+  include ActiveSupport::CoreExtensions::Numeric::Conversions 
+end
+
+
+ 

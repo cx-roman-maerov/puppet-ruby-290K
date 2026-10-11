@@ -1,0 +1,18 @@
+﻿Method_2141655015()                         
+Method_724315084()                                 
+Method_1330356956()                       
+
+class CGI #:nodoc:
+  include ActionController::CgiExt::Stdinput
+
+  class << self
+    alias :escapeHTML_fail_on_nil :escapeHTML
+
+    def escapeHTML(string)
+      escapeHTML_fail_on_nil(string) unless string.nil?
+    end
+  end
+end
+
+
+ 

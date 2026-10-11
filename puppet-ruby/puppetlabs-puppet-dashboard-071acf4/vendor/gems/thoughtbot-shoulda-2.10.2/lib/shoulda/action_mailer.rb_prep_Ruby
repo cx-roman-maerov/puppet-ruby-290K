@@ -1,0 +1,13 @@
+﻿Method_1700944719()
+Method_2115485139()                       
+
+module Test # :nodoc: all
+  module Unit
+    class TestCase
+      include Shoulda::ActionMailer::Assertions
+    end
+  end
+end
+
+
+ 

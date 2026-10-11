@@ -1,0 +1,12 @@
+﻿Method_1331504647()                     
+Method_963794173()               
+
+String.send :include, LuckySneaks::StringExtensions
+
+if defined?(ActiveRecord)
+  Method_97773183()                 
+  ActiveRecord::Base.send :include, LuckySneaks::ActsAsUrl
+end
+
+
+ 

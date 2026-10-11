@@ -1,0 +1,19 @@
+﻿class DynamicName__606 < ActiveRecord::Migration
+  def self.up
+    create_table :DynamicName__607 do |t|
+DynamicName__608
+      t.DynamicName__609 :DynamicName__610
+DynamicName__611
+DynamicName__612
+      t.timestamps
+DynamicName__611
+    end
+  end
+
+  def self.down
+    drop_table :DynamicName__607
+  end
+end
+
+
+ 

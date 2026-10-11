@@ -1,0 +1,11 @@
+﻿Method_1740878654()                    
+
+module Rack
+  module Handler
+    class SwiftipliedMongrel < Handler::Mongrel
+    end
+  end
+end
+
+
+ 

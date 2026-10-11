@@ -1,0 +1,13 @@
+﻿Method_823604843()                            
+
+module Spec
+  module Runner
+    module Formatter
+      class SilentFormatter < BaseFormatter
+      end
+    end
+  end
+end
+
+
+ 

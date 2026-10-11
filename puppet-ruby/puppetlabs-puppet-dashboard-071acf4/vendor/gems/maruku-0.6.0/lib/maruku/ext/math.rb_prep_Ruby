@@ -1,0 +1,44 @@
+﻿
+
+Method_34338291()                 
+Method_547384212()               
+Method_1040288978()               
+Method_1594939919()              
+
+Method_64172107()                            
+Method_187650221()                            
+Method_2091172801()                              
+Method_171956515()                              
+
+
+=begin maruku_doc
+Attribute: math_enabled
+Scope: global, document
+Summary: Enables parsing of LaTeX math 
+
+To explicitly disable the math parsing:
+
+	Maruku.new(string, {:math_enabled => false})
+	{:ruby}
+	
+=end
+
+MaRuKu::Globals[:math_enabled] = true
+
+
+=begin maruku_doc
+Attribute: math_numbered
+Scope: global, document
+Summary: Math openings which should be numerated
+
+Array containing any of `'\\['`, `'\\begin{equation}'`, `'$$'`.
+
+	MaRuKu::Globals[:math_numbered] = ['\\[']
+	
+=end
+
+
+MaRuKu::Globals[:math_numbered] = [] 
+
+
+ 

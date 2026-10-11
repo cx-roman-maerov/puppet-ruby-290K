@@ -1,0 +1,12 @@
+﻿require 'test_helper'
+Method_1002899801()            
+
+class DynamicName__620Test < ActionController::PerformanceTest
+  # Replace this with your real tests.
+  def test_homepage
+    get '/'
+  end
+end
+
+
+ 

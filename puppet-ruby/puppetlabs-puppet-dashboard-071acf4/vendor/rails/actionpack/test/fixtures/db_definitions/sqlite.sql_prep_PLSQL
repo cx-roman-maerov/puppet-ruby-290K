@@ -1,0 +1,50 @@
+﻿create table 'companies' (
+  'id' integer primary key not null,
+  'name' text default null,
+  'rating' integer default 1
+);
+
+create table 'replies' (
+  'id' integer primary key not null, 
+  'content' text, 
+  'created_at' datetime, 
+  'updated_at' datetime, 
+  'topic_id' integer,
+  'developer_id' integer
+);
+
+create table 'topics' (
+  'id' integer primary key not null, 
+  'title' varchar(255), 
+  'subtitle' varchar(255), 
+  'content' text, 
+  'created_at' datetime, 
+  'updated_at' datetime
+);
+
+create table 'developers' (
+  'id' integer primary key not null,
+  'name' text default null,
+  'salary' integer default 70000,
+  'created_at' datetime default null,
+  'updated_at' datetime default null
+);
+
+create table 'projects' (
+  'id' integer primary key not null,
+  'name' text default null
+);
+
+create table 'developers_projects' (
+  'developer_id' integer not null,
+  'project_id' integer not null,
+  'joined_on' date default null,
+  'access_level' integer default 1
+);
+
+create table 'mascots' (
+  'id' integer primary key not null, 
+  'company_id' integer not null,
+  'name' text default null
+);
+ 

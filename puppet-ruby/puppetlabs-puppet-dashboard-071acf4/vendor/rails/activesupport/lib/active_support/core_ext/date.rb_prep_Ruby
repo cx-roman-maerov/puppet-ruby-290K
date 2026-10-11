@@ -1,0 +1,13 @@
+﻿Method_1033342435()
+Method_1526848225()                            
+Method_403512907()                                 
+Method_1923154968()                               
+
+class Date#:nodoc:
+  include ActiveSupport::CoreExtensions::Date::Behavior
+  include ActiveSupport::CoreExtensions::Date::Calculations
+  include ActiveSupport::CoreExtensions::Date::Conversions
+end
+
+
+ 

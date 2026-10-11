@@ -1,0 +1,28 @@
+﻿# encoding: utf-8
+
+Method_307761308()                                  
+Method_732135157()                               
+Method_454128777()                                  
+Method_1011158998()                            
+Method_408960973()                                       
+Method_1943217473()                               
+Method_1995309507()                               
+Method_2061388864()                           
+Method_591026173()                              
+Method_1104943294()                              
+Method_480433352()                                    
+
+class String #:nodoc:
+  include ActiveSupport::CoreExtensions::String::Access
+  include ActiveSupport::CoreExtensions::String::Conversions
+  include ActiveSupport::CoreExtensions::String::Filters
+  include ActiveSupport::CoreExtensions::String::Inflections
+  include ActiveSupport::CoreExtensions::String::StartsEndsWith
+  include ActiveSupport::CoreExtensions::String::Iterators
+  include ActiveSupport::CoreExtensions::String::Behavior
+  include ActiveSupport::CoreExtensions::String::Multibyte
+  include ActiveSupport::CoreExtensions::String::OutputSafety
+end
+
+
+ 
